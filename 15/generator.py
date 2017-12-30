@@ -78,7 +78,7 @@ def solve(links, start, end):
         return sum([solve(links, start, finish) for finish in links[end]])
 
 def dot(g, s):
-    return subprocess.Popen("echo \"" + dot_graph(g, s) + "\" | dot -Tjpg | base64", shell = True, stdout = subprocess.PIPE).stdout.read().decode('utf-8')
+    return subprocess.Popen("echo \"" + dot_graph(g, s) + "\" | dot -Tsvg | base64", shell = True, stdout = subprocess.PIPE).stdout.read().decode('utf-8')
 
 def generate():
     s = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
@@ -89,4 +89,4 @@ def generate():
         r["questions"].append({"question_name": "Задача №" + hmac.new(bytearray(dot_graph(g, s),'utf-8'), bytearray('text','utf-8'), hashlib.sha1).hexdigest(), "question_text": task(n, s), "question_media": dot(g, s), "question_answer": solve(dict_graph(g), 0, n - 1)})
     return json.dumps(r)
 
-#print(generate())
+print(generate())
