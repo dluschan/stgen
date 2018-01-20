@@ -78,7 +78,7 @@ def solve(links, start, end):
         return sum([solve(links, start, finish) for finish in links[end]])
 
 def dot(g, s):
-    return subprocess.Popen("echo \"" + dot_graph(g, s) + "\" | dot -Tsvg | base64", shell = True, stdout = subprocess.PIPE).stdout.read().decode('utf-8')
+    return subprocess.Popen("echo \"" + dot_graph(g, s) + "\" | dot -Tsvg", shell = True, stdout = subprocess.PIPE).stdout.read().decode('utf-8')
 
 def generate():
     s = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'

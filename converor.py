@@ -44,7 +44,7 @@ for q in j["questions"]:
     
     questiontext = create_tag('questiontext', None, {"format": "html"})
     if "question_media" in q:
-        text = create_tag('text', "<p>" + q["question_text"] + "</p>" + "<p><img src=\"data:image/svg;base64," + q["question_media"] + "\"></p>", cdata = True)
+        text = create_tag('text', "<p>" + q["question_text"] + "</p>" + q["question_media"], cdata = True)
     else:
         text = create_tag('text', "<p>" + q["question_text"] + "</p>", cdata = False)
     questiontext.appendChild(text)
