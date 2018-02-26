@@ -1,5 +1,5 @@
 from boolean import *
-import itertools, functools, random
+import itertools, functools, random, copy
 
 unary = [Positive, Negation]
 binary = [Conjunction, Disjunction, Implication, Equal, Notequal]
@@ -28,13 +28,17 @@ def multipicking(masks, truth):
 
 def filteredmultipicking(masks, truth):
     '''Функция фильтрует все комбинации '''
-    return list(*filter(lambda s: len(set((tuple(x) for x in s))) == len(s), itertools.product(*multipicking(masks, truth))))
+    res = []
+    for comb in itertools.product(*multipicking(masks, truth)):
+        if len(comb) == len(set([tuple(x) for x in comb])):
+            res += list(comb)
+    return res
 
 def output(data):
     '''Функция выводит на экран списко строк таблицы истинности'''
     print(*data, sep = '\n')
 
-def generate_terms(k, alphabet):
+def create_terms(k, alphabet):
     '''Функция отбирает k случайных переменных из переданного ей алфавита alphabet'''
     names = list(alphabet)
     random.shuffle(names)
@@ -42,21 +46,32 @@ def generate_terms(k, alphabet):
 
 def create_function(terms):
     '''Функция создаёт случайную логическую функцию от переменных в списке terms'''
-    return functools.reduce(lambda x, y: random.choice(binary)(x, y), terms)
+    #x /\ y \/ (y ≡ z) \/ w
+    assert(len(terms) > 3)
+    return Disjunction(Disjunction(Conjunction(terms[0], terms[1]), Equal(terms[1], terms[2])), terms[3])
 
-def checkdeterminate(f, order, limitations, table):
+def checkdeterminate(f, terms, limitations, table):
     '''Функция проверяет единственность порядка переменных order, соответствующего ограничениям limitations из таблицы истинности table функции f'''
     return sum([1 if check(f, order, filteredmultipicking(limitations, table)) else 0 for order in itertools.permutations(terms)]) == 1
 
+def relieve(limitations):
+    '''Функция вставляет в таблицу истинности несколько «2», означающих любое значение переменной'''
+    #Не работает
+    for i in range(2):
+        limitations[random.randint(0, len(limitations) - 1)][random.randint(0, len(limitations[0][:-1]) - 1)] = 2
+    return limitations
+
 def generate_slice_table(f, terms):
-    '''Функция возвращает такой срез (подмножество) таблицы истинности логической функции f, по которой можно восстановить порядок переменных в таблице, либо пустой список, если такого среза не существует'''
+    '''Функция возвращает такой срез (подмножество) таблицы истинности логической функции f, по которому можно восстановить порядок переменных в таблице, либо пустой список, если такого среза не существует'''
     table = truthtable(f, terms)
+    if not checkdeterminate(f, terms, table, table):
+        return [[]]
     for k in range(1, len(table) + 1):
         for limitations in itertools.combinations(table, k):
-            if checkdeterminate(f, order, limitations, table):
-                return list(limitations)
-    else:
-        return []
+            lite_limitations = relieve(copy.deepcopy(limitations))
+            if checkdeterminate(f, terms, lite_limitations, table):
+                return lite_limitations
+    return [[]]
 
 if __name__ == "__main__":
     pass
