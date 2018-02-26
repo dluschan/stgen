@@ -1,30 +1,9 @@
-from xml.dom import minidom
+from tag import create_tag
 import sys, json
-
-def create_tag(name: str=None, text: str=None, attributes: dict=None, *, cdata: bool=False):
-    doc = minidom.Document()
-
-    if name is None:
-        return doc
-
-    tag = doc.createElement(name)
-
-    if text is not None:
-        if cdata is True:
-            tag.appendChild(doc.createCDATASection(text))
-        else:
-            tag.appendChild(doc.createTextNode(text))
-
-    if attributes is not None:
-        for k, v in attributes.items():
-            tag.setAttribute(k, str(v))
-
-    return tag
 
 j = json.loads(input())
 
 doc = create_tag()
-
 quiz = create_tag('quiz')
 doc.appendChild(quiz)
 
@@ -56,4 +35,4 @@ for q in j["questions"]:
     question.appendChild(answer)
     quiz.appendChild(question)
 
-print(doc.toprettyxml(indent="  "))
+print(doc.toprettyxml(indent = "  "))
