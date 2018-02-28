@@ -1,5 +1,5 @@
 from tag import create_tag
-import sys, json
+import json
 
 j = json.loads(input())
 
