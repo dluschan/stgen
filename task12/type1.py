@@ -8,11 +8,11 @@ class Type1(Common):
         self.byte = (self.task.netmask().ones() - 1) // 8
 
     def category(self):
-        return super(type(self), self).category() + 'Тип 1'
+        return Common.category(self) + 'Тип 1'
 
     def question_text(self):
         question = " Для узла с IP-адресом {host} адрес сети равен {network}. Определите чему равен {order} байт маски. Ответ запишите в виде десятичного числа."
         return Common.question_text(self) + question.format(**{'host': self.latex(self.task.host()), 'network': self.latex(self.task.network()), 'order': choice(self.order[self.byte])})
 
     def question_answer(self):
-        return str(sum(self.task.network()))
+        return self.task.netmask()[3 - self.byte]

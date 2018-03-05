@@ -7,6 +7,10 @@ class Address():
         assert(type(data) == int)
         self.data = data
 
+    def __lt__(self, other):
+        '''Сравнение двух адресов'''
+        return int(self) < int(other)
+
     def __iter__(self):
         '''Перебор байтов интернет адреса'''
         for rank in [24, 16, 8, 0]:
@@ -74,6 +78,10 @@ class TripleIPAddresses:
         '''Возвращает адрес компьютера.'''
         return self._host_
 
+    def hostmask(self):
+        '''Возвращает сетевую маску.'''
+        return (2**32 - 1) ^ int(self._netmask_)
+
     def netmask(self):
         '''Возвращает сетевую маску.'''
         return self._netmask_
@@ -82,14 +90,28 @@ class TripleIPAddresses:
         '''Возвращает адрес сети.'''
         return self._network_
 
+    def hostnumber(self):
+        return self.hostmask() & int(self.host())
+
+    def neighbor(self, number):
+        return HostAddress(int(self.network()) | number)
+
     def suitable(self):
         '''Возвращает список масок, которые подходят для данной пары хоста и сети.'''
-        return [NetworkMask(m) for m in range(9) if int(NetworkAddress(self._host_, NetworkMask(m))) == int(self._network_)]
+        return [NetworkMask(m) for m in range(33) if int(NetworkAddress(self._host_, NetworkMask(m))) == int(self._network_)]
 
 class TripleIPAddressesDeterminated(TripleIPAddresses):
     '''«Определённая» «сетевая тройка»: адрес компьютера, маска сети и адрес сети, в которой маску сети можно однозначно определить по адресам компьютера и сети.'''
     def __init__(self):
         '''Создание «определённой» «сетевой тройки».'''
         self._netmask_ = NetworkMask()
+        self._host_ = HostAddress(int(HostAddress()) | 3 << (32 - 1 - self._netmask_.ones()))
+        self._network_ = NetworkAddress(self._host_, self._netmask_)
+
+class TripleIPAddressesDeterminatedLimitedMask(TripleIPAddresses):
+    '''«Определённая» «сетевая тройка»: адрес компьютера, маска сети и адрес сети, в которой маску сети можно однозначно определить по адресам компьютера и сети, задающие сеть, в которой не больше, чем 2**16 компьютеров.'''
+    def __init__(self):
+        '''Создание «определённой» «сетевой тройки».'''
+        self._netmask_ = NetworkMask(randint(16, 29))
         self._host_ = HostAddress(int(HostAddress()) | 3 << (32 - 1 - self._netmask_.ones()))
         self._network_ = NetworkAddress(self._host_, self._netmask_)

@@ -1,5 +1,5 @@
 from ..generator import BaseGenerator
-from ..ip import TripleIPAddresses, TripleIPAddressesDeterminated
+from ..ip import TripleIPAddresses, TripleIPAddressesDeterminated, TripleIPAddressesDeterminatedLimitedMask
 
 class Common(BaseGenerator):
     '''Задача номер 12'''

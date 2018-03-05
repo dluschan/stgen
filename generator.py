@@ -13,7 +13,7 @@ class MainGenerator:
         for task_type in self.clses:
             task_generator = task_type()
             quiz.appendChild(task_generator.get_type_tag())
-            for _ in range(2):
+            for _ in range(1):
                 task_generator = task_type()
                 quiz.appendChild(task_generator.get_task_tag())
         return doc.toprettyxml(indent = '   ')
@@ -39,7 +39,7 @@ class BaseGenerator:
         questiontext.appendChild(text)
         question.appendChild(questiontext)
         answer = create_tag('answer', None, {"fraction": "100", "format": "moodle_auto_format"})
-        text = create_tag('text', self.question_answer())
+        text = create_tag('text', str(self.question_answer()))
         answer.appendChild(text)
         question.appendChild(answer)
         return question
