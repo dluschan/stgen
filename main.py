@@ -1,10 +1,11 @@
 import urwid
-import generator
+from .generator import BaseGenerator, MainGenerator
 
 def all_subclasses(cls):
     return cls.__subclasses__() + [g for s in cls.__subclasses__() for g in all_subclasses(s)]
 
-choices = list(map(str, filter(lambda g: g.__subclasses__() == [], all_subclasses(generator.BaseGenerator))))
+choices = list(filter(lambda g: g.__subclasses__() == [], all_subclasses(BaseGenerator)))
+choices_list = list(map(str, choices))
 choiced = {}
 
 def menu(title, choices):
@@ -19,7 +20,7 @@ def menu(title, choices):
     return urwid.ListBox(urwid.SimpleFocusListWalker(body))
 
 def process(button, output):
-    print(generator.MainGenerator(choiced).generate(), file = open(output.get_edit_text(), 'w'))
+    print(MainGenerator(choiced).generate(), file = open(output.get_edit_text(), 'w'))
 
 def click_ok(checkbox, button):
     response = urwid.Edit('Enter output filename: ', 'output.xml')
@@ -30,12 +31,12 @@ def click_ok(checkbox, button):
     main.original_widget = urwid.Filler(urwid.Pile([response, urwid.AttrMap(ok_btn, None, focus_map='reversed'), urwid.AttrMap(done_btn, None, focus_map='reversed')]))
 
 def item_chosen(checkbox, choice, param):
-    choiced[param] = choice
+    choiced[choices[choices_list.index(param)]] = choice
 
 def exit_program(button):
     raise urwid.ExitMainLoop()
 
-main = urwid.Padding(menu('Question types', choices), left=2, right=2)
+main = urwid.Padding(menu('Question types', choices_list), left=2, right=2)
 top = urwid.Overlay(main, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
     align='center', width=('relative', 60),
     valign='middle', height=('relative', 60),
