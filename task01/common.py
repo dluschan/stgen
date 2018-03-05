@@ -1,14 +1,12 @@
-from .. import notation, generator
+from .. import notation
+from ..generator import *
 from random import randint, choice, shuffle
 import json, sys, hmac, hashlib
 
-class Generator_01(generator.BaseGenerator):
+class Common(BaseGenerator):
     '''Задача номер 1'''
     def category(self):
         return '$course$/ЕГЭ/Задача 1/'
-
-    def question_type(self):
-        return 'shortanswer'
 
     def cdata(self):
         return False

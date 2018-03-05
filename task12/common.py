@@ -1,5 +1,5 @@
 from ..generator import BaseGenerator
-from ..ip import TripleIPAddresses
+from ..ip import TripleIPAddresses, TripleIPAddressesDeterminated
 
 class Common(BaseGenerator):
     '''Задача номер 12'''

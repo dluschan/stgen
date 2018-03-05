@@ -1,2 +1,2 @@
-from . import generator
+from . import common
 from . import type6

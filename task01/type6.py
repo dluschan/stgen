@@ -1,9 +1,8 @@
 from ..notation import transform
 from random import randint, choice
-from ..tag import create_tag
-from .generator import Generator_01
+from .common import Common
 
-class Generator_01_type_1(Generator_01):
+class Type1(Common):
     'Идея задачи: использование сдвига вместо деления и умножения.'
 
     def __init__(self):
@@ -24,7 +23,7 @@ class Generator_01_type_1(Generator_01):
             self.terms.append(self.terms.pop(0))
 
     def category(self):
-        return super(Generator_01_type_1, self).category() + 'Тип 6'
+        return Common.category(self) + 'Тип 6'
 
     def question_text(self):
         expression = ' '.join([self.convert(*p, self.source_base) for p in self.terms])[2:]
