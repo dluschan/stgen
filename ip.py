@@ -42,12 +42,12 @@ class NetworkMask(Address):
         В качестве необязательного параметра принимает количество единиц в маске. Если количество единиц не задаётся, оно выбирается случайно от 3 до 29 включительно.'''
         if ones is None:
             ones = randint(3, 29)
-        self.ones = ones
+        self._ones_ = ones
         Address.__init__(self, (2**ones - 1) << (32 - ones))
 
     def ones(self):
         '''Возвращает количество единиц в маске сети.'''
-        return self.ones
+        return self._ones_
 
 class NetworkAddress(Address):
     '''Network address'''
@@ -91,5 +91,5 @@ class TripleIPAddressesDeterminated(TripleIPAddresses):
     def __init__(self):
         '''Создание «определённой» «сетевой тройки».'''
         self._netmask_ = NetworkMask()
-        self._host_ = HostAddress(int(HostAddress()) | 3 << (32 - 1 - self._netmask_.ones))
+        self._host_ = HostAddress(int(HostAddress()) | 3 << (32 - 1 - self._netmask_.ones()))
         self._network_ = NetworkAddress(self._host_, self._netmask_)
