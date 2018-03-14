@@ -9,9 +9,5 @@ setup(
     keywords = 'info informatics use exam',
     description = 'Package for generate questions for informatics USE (moodle format).',
     install_requires = ['urwid'],
-    entry_points = {
-        'console_scripts': [
-            'exam = main:main',
-        ],
-    },
+    test_suite = 'tests',
 )
