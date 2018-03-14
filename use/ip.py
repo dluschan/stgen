@@ -17,6 +17,9 @@ class Address():
             yield self.data >> rank & 0xff
 
     def __getitem__(self, key):
+        '''Доступ к отдельному байту адреса по индексу.
+        
+        Индексы соответствуют разрядам адреса в 256-тиричной системе счисления.'''
         assert(type(key) == int and 0 <= key <= 3)
         return self.data >> (8 * key) & 0xff
 
