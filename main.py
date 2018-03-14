@@ -1,12 +1,9 @@
 import urwid
-from .generator import BaseGenerator, MainGenerator
+from .generator import MainGenerator
+from .task import BaseTask
 
 def all_subclasses(cls):
     return cls.__subclasses__() + [g for s in cls.__subclasses__() for g in all_subclasses(s)]
-
-choices = list(filter(lambda g: g.__subclasses__() == [], all_subclasses(BaseGenerator)))
-choices_list = list(map(str, choices))
-choiced = {}
 
 def menu(title, choices):
     body = [urwid.Text(title), urwid.Divider()]
@@ -36,9 +33,17 @@ def item_chosen(checkbox, choice, param):
 def exit_program(button):
     raise urwid.ExitMainLoop()
 
-main = urwid.Padding(menu('Question types', choices_list), left=2, right=2)
-top = urwid.Overlay(main, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
-    align='center', width=('relative', 60),
-    valign='middle', height=('relative', 60),
-    min_width=20, min_height=9)
-urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
+def main():
+    choices = list(filter(lambda g: g.__subclasses__() == [], all_subclasses(BaseTask)))
+    choices_list = list(map(str, choices))
+    choiced = {}
+
+    mainMenu = urwid.Padding(menu('Question types', choices_list), left=2, right=2)
+    top = urwid.Overlay(mainMenu, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
+        align='center', width=('relative', 60),
+        valign='middle', height=('relative', 60),
+        min_width=20, min_height=9)
+    urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
+
+if __name__ == "__main__":
+    main()

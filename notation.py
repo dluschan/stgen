@@ -1,21 +1,15 @@
 alphabetic = '0123456789abcdefghijklmnopqrstuvwxyz'
 
-def transform(x, n, digits = None):
+def transform(x, n, digits = None, based = False):
     if digits is None:
         digits = alphabetic
     result = ''
     while x:
         result = digits[x % n] + result
         x //= n
+    if based:
+        result += '_' + '{'+ str(n) + '}'
     return result
-
-def count_digit(x, n, d):
-    k = 0
-    while x > 0:
-        if x % n == d:
-            k += 1
-        x //= n
-    return k
 
 if __name__ == "__main__":
     s = input('Enter source number and its radix [optional]: ')
