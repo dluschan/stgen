@@ -10,4 +10,9 @@ setup(
     description = 'Package for generate questions for informatics USE (moodle format).',
     install_requires = ['urwid'],
     test_suite = 'tests',
+    entry_points = {
+        'console_scripts': [
+            'generate = use.tui.tui:main'
+        ],
+    },
 )
