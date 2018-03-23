@@ -2,6 +2,7 @@ import unittest
 from use.notation import transform
 
 class TestTransform(unittest.TestCase):
+    '''Тестирование перевода чисел в разные системы счисления.'''
     def test_transform(self):
         self.assertEqual(transform(255, 2), '11111111')
 
@@ -12,5 +13,4 @@ class TestTransform(unittest.TestCase):
         self.assertEqual(transform(255, 2, based = True), '11111111_{2}')
 
     def test_transform_error(self):
-        with self.assertRaises(IndexError):
-            transform(255, 2, 'q')
+        self.assertRaises(IndexError, transform, 255, 2, 'q')
