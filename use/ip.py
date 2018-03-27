@@ -1,120 +1,173 @@
 from random import randint
+from .notation import transform
 
-class Address():
-    '''IPv4 addresses'''
-    def __init__(self, data):
-        '''Создание интернет адреса'''
-        assert(type(data) == int)
-        self.data = data
 
-    def __lt__(self, other):
-        '''Сравнение двух адресов'''
-        return int(self) < int(other)
+class Address:
+	"""IPv4 addresses"""
+	bits = 32
 
-    def __iter__(self):
-        '''Перебор байтов интернет адреса'''
-        for rank in [24, 16, 8, 0]:
-            yield self.data >> rank & 0xff
+	def __init__(self, data):
+		"""Создание интернет адреса."""
+		assert(type(data) == int)
+		self.data = data
 
-    def __getitem__(self, key):
-        '''Доступ к отдельному байту адреса по индексу.
-        
-        Индексы соответствуют разрядам адреса в 256-тиричной системе счисления.'''
-        assert(type(key) == int and 0 <= key <= 3)
-        return self.data >> (8 * key) & 0xff
+	def __lt__(self, other):
+		"""Сравнение двух адресов на меньше."""
+		return int(self) < int(other)
 
-    def __int__(self):
-        '''Представление интернет адреса в виде целого числа'''
-        return self.data
+	def __eq__(self, other):
+		"""Сравнение двух адресов на равенство."""
+		return int(self) == int(other)
 
-    def __str__(self):
-        '''Представление интернет адреса в виде строки'''
-        return '.'.join(map(str, self))
+	def __iter__(self):
+		"""Перебор байтов интернет адреса."""
+		for rank in [24, 16, 8, 0]:
+			yield self.data >> rank & 0xff
+
+	def __getitem__(self, key):
+		"""Доступ к отдельному байту адреса по индексу.
+
+		Индексы соответствуют разрядам адреса в 256-тиричной системе счисления."""
+		assert(type(key) == int and 0 <= key <= 3)
+		return self.data >> (8 * key) & 0xff
+
+	def __int__(self):
+		"""Представление интернет адреса в виде целого числа"""
+		return self.data
+
+	def __str__(self):
+		"""Представление интернет адреса в виде строки"""
+		return ".".join(map(str, self))
+
+	def ones(self):
+		"""Возвращает количество единиц в адресе."""
+		return transform(self.data, 2).count('1')
+
+	def zeros(self):
+		"""Возвращает количество нулей в адресе."""
+		return self.bits - self.ones()
+
+	@property
+	def randhost(self):
+		"""Случайный адрес"""
+		return randint(2**24, 2**32 - 2**24)
+
 
 class HostAddress(Address):
-    '''Host addresses'''
-    def __init__(self, address = None):
-        '''Создание адреса компьютера.
-        
-        Если адрес не передаётся, он выбирается случайно в диапазоне [2**24; 2**32 - 2**24].'''
-        if address is None:
-            address = randint(2**24, 2**32 - 2**24)
-        Address.__init__(self, address)
+	"""Адресс компьютера."""
+	def __init__(self, address=None):
+		"""Создание адреса компьютера."""
+		if address is None:
+			address = self.randhost
+		super().__init__(address)
 
-class NetworkMask(Address):
-    '''Network mask'''
-    def __init__(self, ones = None):
-        '''Создание маски сети.
-        
-        В качестве необязательного параметра принимает количество единиц в маске. Если количество единиц не задаётся, оно выбирается случайно от 3 до 29 включительно.'''
-        if ones is None:
-            ones = randint(3, 29)
-        self._ones_ = ones
-        Address.__init__(self, (2**ones - 1) << (32 - ones))
+	def __and__(self, other):
+		"""Побитовая коньюкнция."""
+		assert(isinstance(other, Mask))
+		if type(other) == NetworkMask:
+			return NetworkAddress(int(self) & int(other))
+		elif type(other) == HostMask:
+			return Address(int(self) & int(other))
 
-    def ones(self):
-        '''Возвращает количество единиц в маске сети.'''
-        return self._ones_
+	def __rand__(self, other):
+		"""Побитовая коньюкнция."""
+		return self & other
+
+
+class Mask(Address):
+	"""Маска для интернет адреса."""
+	def __init__(self, address):
+		"""Создание маски."""
+		super().__init__(address)
+
+
+class NetworkMask(Mask):
+	"""Маска подсети."""
+	def __init__(self, ones=None):
+		"""Создание маски подсети.
+
+		В качестве необязательного параметра принимает количество единиц в маске.
+		Если количество единиц не задаётся, оно выбирается случайно от 3 до 29 включительно."""
+		if ones is None:
+			ones = randint(3, 29)
+		super().__init__(int('1' * ones + '0' * (Address.bits - ones), 2))
+
+
+class HostMask(Mask):
+	"""Маска хоста в подсети."""
+	def __init__(self, netmask):
+		"""Создание маски хоста."""
+		assert(type(netmask) == NetworkMask)
+		super().__init__(int(netmask) ^ int('1' * Address.bits, 2))
+
 
 class NetworkAddress(Address):
-    '''Network address'''
-    def __init__(self, *args):
-        '''Создание адреса сети.
-        
-        В качестве необязательных параметров принимает либо числовое значение сетевого адреса, либо адрес хоста и маску сети. Если параметры на передаются, то сетевой адрес выбирается случайно в диапазоне [2**24; 2**32 - 2**24].'''
-        if len(args) == 0:
-            Address.__init__(self, randint(2**24, 2**32 - 2**24))
-        elif len(args) == 1:
-            Address.__init__(self, args[0])
-        elif len(args) == 2:
-            Address.__init__(self, int(args[0]) & int(args[1]))
+	"""Адрес подсети."""
+	def __init__(self, address):
+		"""Создание адреса подсети."""
+		super().__init__(address)
 
-class TripleIPAddresses:
-    '''«Сетевая тройка»: адрес компьютера, маска сети и адрес сети.'''
-    def __init__(self):
-        '''Создание «сетевой тройки».'''
-        self._netmask_ = NetworkMask()
-        self._host_ = HostAddress()
-        self._network_ = NetworkAddress(self._host_, self._netmask_)
+	def __or__(self, other):
+		"""Побитовая дизьюнкция."""
+		assert(isinstance(other, Address))
+		assert(int(self) & int(other) == 0)
+		return HostAddress(int(self) | int(other))
 
-    def host(self):
-        '''Возвращает адрес компьютера.'''
-        return self._host_
+	def __ror__(self, other):
+		"""Побитовая дизьюнкция."""
+		return self | other
 
-    def hostmask(self):
-        '''Возвращает сетевую маску.'''
-        return (2**32 - 1) ^ int(self._netmask_)
 
-    def netmask(self):
-        '''Возвращает сетевую маску.'''
-        return self._netmask_
+class MaskedHostAddress(HostAddress):
+	"""Адрес компьютера с маской подсети."""
+	def __init__(self, address=None, mask=None):
+		"""Создание адреса компьютера с маской подсети."""
+		super().__init__(address)
+		self.network_mask = NetworkMask(mask)
 
-    def network(self):
-        '''Возвращает адрес сети.'''
-        return self._network_
+	def host(self):
+		"""Возвращает адрес компьютера."""
+		return self
 
-    def hostnumber(self):
-        return self.hostmask() & int(self.host())
+	def hostmask(self):
+		"""Возвращает маску компьютера в подсети."""
+		return HostMask(self.network_mask)
 
-    def neighbor(self, number):
-        return HostAddress(int(self.network()) | number)
+	def netmask(self):
+		"""Возвращает маску подсети."""
+		return self.network_mask
 
-    def suitable(self):
-        '''Возвращает список масок, которые подходят для данной пары хоста и сети.'''
-        return [NetworkMask(m) for m in range(33) if int(NetworkAddress(self._host_, NetworkMask(m))) == int(self._network_)]
+	def network(self):
+		"""Возвращает адрес подсети."""
+		return self & self.network_mask
 
-class TripleIPAddressesDeterminated(TripleIPAddresses):
-    '''«Определённая» «сетевая тройка»: адрес компьютера, маска сети и адрес сети, в которой маску сети можно однозначно определить по адресам компьютера и сети.'''
-    def __init__(self):
-        '''Создание «определённой» «сетевой тройки».'''
-        self._netmask_ = NetworkMask()
-        self._host_ = HostAddress(int(HostAddress()) | 3 << (32 - 1 - self._netmask_.ones()))
-        self._network_ = NetworkAddress(self._host_, self._netmask_)
+	def hostnumber(self):
+		"""Возвращает номер по порядку компьютера в подсети."""
+		return self & self.hostmask()
 
-class TripleIPAddressesDeterminatedLimitedMask(TripleIPAddresses):
-    '''«Определённая» «сетевая тройка»: адрес компьютера, маска сети и адрес сети, в которой маску сети можно однозначно определить по адресам компьютера и сети, задающие сеть, в которой не больше, чем 2**16 компьютеров.'''
-    def __init__(self):
-        '''Создание «определённой» «сетевой тройки».'''
-        self._netmask_ = NetworkMask(randint(16, 29))
-        self._host_ = HostAddress(int(HostAddress()) | 3 << (32 - 1 - self._netmask_.ones()))
-        self._network_ = NetworkAddress(self._host_, self._netmask_)
+	def neighbor(self, number):
+		"""Возвращает адрес соседнего компьютера в нашей подсети с номером по порядку number."""
+		return self.network() | Address(number)
+
+	def suitable(self):
+		"""Возвращает список масок, которые подходят для данной пары хоста и подсети."""
+		return [NetworkMask(m) for m in range(self.bits + 1) if self & NetworkMask(m) == self.network()]
+
+
+class MaskedHostAddressDeterminate(MaskedHostAddress):
+	"""Адрес компьютера с маской подсети, которую можно однозначно восстановить по адресу подсети."""
+	def __init__(self):
+		"""Создание адреса компьютера с определённой маской подсети."""
+		super().__init__()
+		self.data |= 3 << (self.network_mask.zeros() - 1)
+
+
+class LimitMaskedHostAddressDeterminate(MaskedHostAddress):
+	"""Адрес компьютера с маской подсети, которую можно однозначно восстановать по адресу подсети, и с ограничениями.
+
+	Количество компьютеров в подсети данного хоста не может превышать 2**16."""
+	def __init__(self):
+		"""Создание адреса компьютера с определённой и ограниченной маской подсети."""
+		super().__init__()
+		self.network_mask = NetworkMask(randint(16, 29))
+		self.data |= 3 << (self.network_mask.zeros() - 1)
