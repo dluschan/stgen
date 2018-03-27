@@ -15,7 +15,7 @@ class TestDecompose(unittest.TestCase):
 		self.assertEqual(positive(0, 2, 100), {1})
 
 	def test_empty_neg(self):
-		self.assertEqual(positive(-1, 2, 1), {})
+		self.assertEqual(positive(-1, 2, 1), set())
 
 	def test_neg(self):
 		self.assertEqual(positive(-1, 2, 2), {1})
