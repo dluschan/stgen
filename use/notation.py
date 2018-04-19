@@ -1,8 +1,7 @@
-alphabetic = '0123456789abcdefghijklmnopqrstuvwxyz'
-
-def transform(x, n, digits = None, based = False):
-    if digits is None:
-        digits = alphabetic
+def transform(x, n, digits = '0123456789abcdefghijklmnopqrstuvwxyz', based = False):
+    '''Возвращает строковое представление числа x в системе счисления n.
+    
+    Необязательный параметр digits задаёт цифры, используемые для представления числа, по умолчанию используются арабские цифры и маленькие буквы латинского алфавита. Если необязательный параметр based равен True, то основание выходной системы счисления добавляется к результирующей строке через нижние подчёркивание, значение по умолчанию False.'''
     result = ''
     while x:
         result = digits[x % n] + result
