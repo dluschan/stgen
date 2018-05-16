@@ -1,5 +1,6 @@
 import xml.dom.minidom
 
+
 def create_tag(name: str = None, text: str = None, attributes: dict = None, *, cdata: bool = False):
     doc = xml.dom.minidom.Document()
 
