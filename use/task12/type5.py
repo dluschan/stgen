@@ -3,7 +3,7 @@ from random import choice
 
 class Type5(Common):
     def __init__(self):
-        self.task = TripleIPAddresses()
+        self.task = MaskedHostAddress()
         self.extreme = {max: ["наибольшее количество единиц", "наименьшее количество нулей"], min: ["наименьшее количество единиц", "наибольшее количество нулей"]}
         self.key = choice(list(self.extreme.keys()))
         self.fun = [lambda x: x, lambda x: 32 - x]

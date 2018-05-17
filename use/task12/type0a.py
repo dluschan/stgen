@@ -2,7 +2,7 @@ from .common import *
 
 class Type0a(Common):
     def __init__(self):
-        self.task = TripleIPAddresses()
+        self.task = MaskedHostAddress()
 
     def category(self):
         return Common.category(self) + 'Тип 0a'

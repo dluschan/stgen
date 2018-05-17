@@ -3,7 +3,7 @@ from random import randint
 
 class Type7b(Common):
     def __init__(self):
-        self.task = TripleIPAddressesDeterminatedLimitedMask()
+        self.task = MaskedHostAddressDeterminatedLimitedMask()
         self.number = randint(1, 2 ** (32 - self.task.netmask().ones()) - 2)
 
     def category(self):

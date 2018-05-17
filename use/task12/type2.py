@@ -2,7 +2,7 @@ from .common import *
 
 class Type2(Common):
     def __init__(self):
-        self.task = TripleIPAddressesDeterminatedLimitedMask()
+        self.task = MaskedHostAddressDeterminatedLimitedMask()
 
     def category(self):
         return Common.category(self) + 'Тип 2'
@@ -12,4 +12,4 @@ class Type2(Common):
         return Common.question_text(self) + question.format(**{'host': self.latex(self.task.host()), 'network': self.latex(self.task.network())})
 
     def question_answer(self):
-        return 2**self.task.netmask().ones() - 2
+        return 2**(32 - self.task.netmask().ones()) - 2

@@ -3,7 +3,7 @@ from random import choice
 
 class Type1(Common):
     def __init__(self):
-        self.task = TripleIPAddressesDeterminated()
+        self.task = MaskedHostAddressDeterminated()
         self.order = [["первый слева", "четвёртый справа"], ["второй слева", "третий справа"], ["третий слева", "второй справа"], ["четвёртый слева", "первый справа"]]
         self.byte = (self.task.netmask().ones() - 1) // 8
 

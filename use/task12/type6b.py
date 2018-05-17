@@ -2,7 +2,7 @@ from .common import *
 
 class Type6b(Common):
     def __init__(self):
-        self.task = TripleIPAddressesDeterminatedLimitedMask()
+        self.task = MaskedHostAddressDeterminatedLimitedMask()
 
     def category(self):
         return Common.category(self) + 'Тип 6b'
