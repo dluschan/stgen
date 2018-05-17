@@ -1,12 +1,12 @@
 from ..notation import transform
-from random import randint, choice
-from .common import Common
+from .common import *
 
-class Type1(Common):
-    'Идея задачи: использование сдвига вместо деления и умножения.'
-
+class Type6(Task16):
+    'Использование сдвига вместо деления и умножения.'
     def __init__(self):
+        super().__init__()
         self.question = 'Найдите значение выражение {expression}. Ответ запишите в системе счисления с основанием {base}.'
+        self.type = 'Тип 6'
         self.m = 8
         self.source_base = randint(2, 9)
         self.limit_base = {2: 5, 3: 3, 4: 2, 5: 2, 6: 2, 7: 1, 8: 1, 9: 1}
@@ -21,9 +21,6 @@ class Type1(Common):
             self.terms = [[term[0], term[1], term[2], term[3], -1*term[4]] for term in self.terms]
         while self.terms[0][4] < 0:
             self.terms.append(self.terms.pop(0))
-
-    def category(self):
-        return Common.category(self) + 'Тип 6'
 
     def question_text(self):
         expression = ' '.join([self.convert(*p, self.source_base) for p in self.terms])[2:]
