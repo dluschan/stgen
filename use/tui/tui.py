@@ -2,8 +2,10 @@ import urwid
 from use.generator import MainGenerator
 from use.task import BaseTask
 
+
 def all_subclasses(cls):
 	return cls.__subclasses__() + [g for s in cls.__subclasses__() for g in all_subclasses(s)]
+
 
 def menu(title, choices):
 	body = [urwid.Text(title), urwid.Divider()]
@@ -16,8 +18,10 @@ def menu(title, choices):
 	urwid.connect_signal(body[-1], 'click', click_ok, body[-1])
 	return urwid.ListBox(urwid.SimpleFocusListWalker(body))
 
+
 def process(button, output):
 	print(MainGenerator(choiced).generate(), file = open(output.get_edit_text(), 'w'))
+
 
 def click_ok(checkbox, button):
 	response = urwid.Edit('Enter output filename: ', 'output.xml')
@@ -27,14 +31,18 @@ def click_ok(checkbox, button):
 	urwid.connect_signal(ok_btn, 'click', process, response)
 	mainMenu.original_widget = urwid.Filler(urwid.Pile([response, urwid.AttrMap(ok_btn, None, focus_map='reversed'), urwid.AttrMap(done_btn, None, focus_map='reversed')]))
 
+
 def item_chosen(checkbox, choice, param):
 	choiced[choices[choices_list.index(param)]] = choice
+
 
 def exit_program(button):
 	raise urwid.ExitMainLoop()
 
+
 def main():
 	urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
+
 
 choices = list(filter(lambda g: g.__subclasses__() == [], all_subclasses(BaseTask)))
 choices_list = list(map(str, choices))
