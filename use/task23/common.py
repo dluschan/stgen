@@ -104,7 +104,7 @@ def compile_terms(extended_terms):
 	"""Компилирует список термов из зашифрованного словаря.
 
 	Пример:
-	{'a': [3, [5, 4, 6, 5]], 'b': [2, [4, 3, 4]]} -> [a5, a4, a6, a5, b4, b3, b4]"""
+	{'a': [3, [5, 4, 6, 5]], 'b': [2, [4, 3, 4]]} -> ['a5', 'a4', 'a6', 'a5', 'b4', 'b3', 'b4']"""
 	r = []
 	for key in extended_terms:
 		r += [Variable(key + str(order)) for order in extended_terms[key][1]]
