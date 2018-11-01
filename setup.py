@@ -8,7 +8,7 @@ setup(
     author_email = 'dluschan@gmail.com',
     keywords = 'info informatics use exam',
     description = 'Package for generate questions for informatics USE (moodle format).',
-    install_requires = ['urwid'],
+    install_requires = ['urwid', 'ply'],
     test_suite = 'tests',
     entry_points = {
         'console_scripts': [
