@@ -1,8 +1,9 @@
 from .common import *
 from math import log
 
+
 class Type5(Task16):
-	'''Превод чисел в разные системы счисления.'''
+	"""Превод чисел в разные системы счисления."""
 	def __init__(self):
 		super().__init__()
 		self.question = 'Определите наименьшее {sign} {based}, запись которого {base} содержит ровно {repeats} цифр {digit}. В ответ запишите искомое {based}.'
@@ -26,8 +27,9 @@ class Type5(Task16):
 	def question_answer(self):
 		return transform(self.number, self.base ** self.degree, self.digits)
 
+
 class Type5a(Task16):
-	'''Превод чисел в разные системы счисления.'''
+	"""Превод чисел в разные системы счисления."""
 	def __init__(self):
 		super().__init__()
 		self.question = 'Определите наименьшее число содержащее {m} цифр в системе счисления с основанием {bigbase}, запись которого в системе счисления с основанием {base} содержит ровно {repeats} цифр {digit}. Ответ укажите в системе счисления с основанием {bigbase}.'

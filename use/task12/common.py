@@ -1,9 +1,9 @@
-from use.tools.generator import BaseGenerator
-from use.tools.ip import MaskedHostAddress
+from ..tools.task import BaseTask
+from ..tools.ip import *
 
 
-class Common(BaseGenerator):
-    '''Задача номер 12'''
+class Task12(BaseTask):
+    """Задача номер 12"""
     def category(self):
         return '$course$/ЕГЭ/Задача 12/'
 

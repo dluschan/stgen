@@ -1,7 +1,8 @@
 from .common import *
 from random import choice
 
-class Type4(Common):
+
+class Type4(Task12):
     def __init__(self):
         self.task = MaskedHostAddress()
         self.extreme = {max: 'наибольшее', min: 'наименьшее'}
@@ -10,11 +11,11 @@ class Type4(Common):
         self.key = choice(list(self.extreme.keys()))
 
     def category(self):
-        return Common.category(self) + 'Тип 4'
+        return Task12.category(self) + 'Тип 4'
 
     def question_text(self):
         question = "Для узла с IP-адресом {host} адрес сети равен {network}. Определите какое {extreme} значение может принимать {order} байт в маске сети.<br>Ответ запишите в виде десятичного числа."
-        return Common.question_text(self) + question.format(**{'host': self.latex(self.task.host()), 'network': self.latex(self.task.network()), 'extreme': self.extreme[self.key], 'order': choice(self.order[self.byte])})
+        return Task12.question_text(self) + question.format(**{'host': self.latex(self.task.host()), 'network': self.latex(self.task.network()), 'extreme': self.extreme[self.key], 'order': choice(self.order[self.byte])})
 
     def question_answer(self):
         return self.key(self.task.suitable())[3 - self.byte]

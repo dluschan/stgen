@@ -1,4 +1,4 @@
-from use.tools.task import BaseTask
+from ..tools.task import BaseTask
 from functools import reduce
 from random import *
 import abc
@@ -256,7 +256,7 @@ class Task22(BaseTask):
 
 	def question_text(self):
 		return self.question.format(mechname=self.mechname, n=str(len(self.commands)), commands=self.view,
-		                            begin=self.points[0], end=self.points[-1], optional=self.optional)
+                                    begin=self.points[0], end=self.points[-1], optional=self.optional)
 
 	def question_answer(self):
 		return self.res

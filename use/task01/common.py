@@ -1,5 +1,5 @@
-from use.tools.task import *
-from use.tools.notation import transform
+from ..tools.task import *
+from ..tools.notation import transform
 from random import randint, choice
 from math import log
 

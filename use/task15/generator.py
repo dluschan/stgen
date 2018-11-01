@@ -1,6 +1,7 @@
 from random import randint, choice, shuffle
 import subprocess, json, sys, hmac, hashlib
 
+
 def horizontal(x):
     'Функция устанавливает горизонтальные (т.е. между вершинами одного слоя) связи в графе'
     k = randint(1, (len(x) + 1) // 2)
@@ -12,6 +13,7 @@ def horizontal(x):
         res.append((w, w+1))
     return res
 
+
 def distribution(a, b):
     'Функция разбивает список a на b промежутков'
     e = list(range(2, len(a) - 1))
@@ -22,6 +24,7 @@ def distribution(a, b):
     for i in range(b):
         r.append(a[s[i]: s[i+1]])
     return r
+
 
 def addition(x, y):
     'Функция получает два списка и расширяет меньший из них с помощью дубликатов его элементов, чтобы списки сравнялись по длине'
@@ -40,6 +43,7 @@ def addition(x, y):
         a, b = b, a
     return list(zip(a, b))
 
+
 def graph(n):
     'Функция генерирует граф заданной длины из набора вершин в виде списка пар вершин'
     k = randint(3, (n + 2) // 3)
@@ -51,6 +55,7 @@ def graph(n):
         res += addition(levels[i][:], levels[i+1][:])
     return res
 
+
 def dot_graph(g, s):
     'Конвертирует граф в формат dot с переименованием вершин согласно строке s'
     res = 'digraph G {node [shape = circle];rankdir = LR;'
@@ -59,9 +64,11 @@ def dot_graph(g, s):
     res += '}'
     return res
 
+
 def task(n, s):
     'Функция генерирует текст вопроса'
     return 'На рисунке - схема дорог, связывающих города ' + ', '.join(s[:n]) + '. По каждой дороге можно двигаться только в одном направлении, указанном стрелкой. Сколько существует различных путей из города ' + s[0] + ' в город ' + s[n-1] + '?'
+
 
 def dict_graph(links):
     'Функция преобразовывает граф из списка связей в список списков'
@@ -70,6 +77,7 @@ def dict_graph(links):
         res[key] = [y[0] for y in filter(lambda x: x[1] == key, links)]
     return res
 
+
 def solve(links, start, end):
     'Функция подсчитывает количество путей в графе'
     if start == end:
@@ -77,8 +85,10 @@ def solve(links, start, end):
     else:
         return sum([solve(links, start, finish) for finish in links[end]])
 
+
 def dot(g, s):
     return subprocess.Popen("echo \"" + dot_graph(g, s) + "\" | dot -Tsvg", shell = True, stdout = subprocess.PIPE).stdout.read().decode('utf-8')
+
 
 def generate():
     s = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
@@ -88,5 +98,3 @@ def generate():
         g = graph(n)
         r["questions"].append({"question_name": "Задача №" + hmac.new(bytearray(dot_graph(g, s),'utf-8'), bytearray('text','utf-8'), hashlib.sha1).hexdigest(), "question_text": task(n, s), "question_media": dot(g, s), "question_answer": solve(dict_graph(g), 0, n - 1)})
     return json.dumps(r)
-
-print(generate())

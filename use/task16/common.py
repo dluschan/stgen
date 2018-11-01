@@ -1,11 +1,11 @@
 from math import log
 from random import choice, randint
+from ..tools.notation import transform
+from ..tools.task import *
 
-from use.tools.notation import transform
-from use.tools.task import *
 
 class Task16(BaseTask):
-	'''ЕГЭ по информатике - Задача номер 16'''
+	"""ЕГЭ по информатике - Задача номер 16"""
 	def __init__(self):
 		self.number = randint(10**3, 2**15)
 		self.digits = '0123456789abcdefghijklmnopqrstuvwxyz'

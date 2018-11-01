@@ -1,4 +1,4 @@
-from use.tools.tag import create_tag
+from .tag import create_tag
 
 
 class MainGenerator:

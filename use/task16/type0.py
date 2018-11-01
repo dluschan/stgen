@@ -3,7 +3,7 @@ from ..tools.decompose import *
 
 
 class Type0(Task16):
-	'''Решение уравнений в различных системах счисления.'''
+	"""Решение уравнений в различных системах счисления."""
 	def __init__(self):
 		super().__init__()
 		self.question = 'Запись числа {number} в некоторой системе счисления выглядит как {view}. Найдите основание этой системы счисления.'
@@ -19,7 +19,7 @@ class Type0(Task16):
 
 
 class SubtypeA(Type0):
-	'''Решение линейных уравнений в различных системах счисления.'''
+	"""Решение линейных уравнений в различных системах счисления."""
 	def __init__(self):
 		super().__init__()
 		self.number = randint(self.base, self.base ** 2 - 1)
@@ -29,7 +29,7 @@ class SubtypeA(Type0):
 
 
 class SubtypeB(Type0):
-	'''Решение квадратных уравнений в различных системах счисления.'''
+	"""Решение квадратных уравнений в различных системах счисления."""
 	def __init__(self):
 		super().__init__()
 		self.number = randint(self.base ** 2, self.base ** 3 - 1)

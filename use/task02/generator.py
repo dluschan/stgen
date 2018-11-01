@@ -1,8 +1,6 @@
-import sys 
-sys.path.append('..')
-
 import random, json, sys, hmac, hashlib, itertools, functools
-import boolequation, table
+from ..tools import boolequation
+from ..tools import table
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 fun_name = 'αβγδεζηθικλμνξοπρστυφχψω'
@@ -14,8 +12,10 @@ task = """Логическая функция {f} задаётся выраж�
 Определите, какому столбцу таблицы истинности соответствует каждая из переменных {names}.
 В ответе напишите подряд без разделителей буквы {names} в том порядке, в котором идут соответствующие им столбцы."""
 
+
 def erase_two(s):
     return [[x if x != 2 else None for x in row] for row in s]
+
 
 def generate():
     qtype = 4 if len(sys.argv) < 2 else int(sys.argv[1])
@@ -46,6 +46,7 @@ def generate():
                                                                       hashlib.sha1).hexdigest(),
                                "question_text": ready_text, "question_answer": answer})
     return json.dumps(r)
+
 
 if __name__ == "__main__":
     print(generate())

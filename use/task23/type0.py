@@ -1,7 +1,7 @@
 from .common import *
 from ..tools.boolean import BinaryLogicOperation, Conjunction, Disjunction, Implication, Equal, Notequal, Negation, Brackets
-from random import choice, choices, shuffle
 from ..tools.common import letters
+from random import choice, shuffle
 
 
 class Type0(Homogeneous):

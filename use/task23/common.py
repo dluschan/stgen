@@ -1,8 +1,8 @@
-from use.tools.task import *
+from ..tools.task import BaseTask
 from ..tools.systemeq import *
-from random import randint, choice, shuffle
 from ..tools.common import letters
 from ..tools.decompose import single_decompose
+from random import randint, choice, shuffle
 
 
 class Task23(BaseTask):
