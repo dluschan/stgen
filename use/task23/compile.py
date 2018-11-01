@@ -4,7 +4,7 @@
 Скобки используюься только для повышения приоритета выражений, и не ставятся, если они не нужны.
 """
 
-from use.tools.boolean import *
+from ..tools.boolean import *
 import ply.lex as lex
 import ply.yacc as yacc
 
