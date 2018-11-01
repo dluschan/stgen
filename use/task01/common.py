@@ -1,6 +1,6 @@
-from ..task import *
-from ..notation import transform
-from random import randint, choice, shuffle
+from use.tools.task import *
+from use.tools.notation import transform
+from random import randint, choice
 from math import log
 
 

@@ -1,5 +1,5 @@
 import unittest
-from use.notation import transform
+from use.tools.notation import transform
 
 class TestTransform(unittest.TestCase):
     '''Тестирование перевода чисел в разные системы счисления.'''

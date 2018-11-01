@@ -1,8 +1,6 @@
-from ..task import *
-from ..tools.boolequation import *
+from use.tools.task import *
 from ..tools.systemeq import *
-from .compile import parse
-from random import randint, choice, choices, shuffle
+from random import randint, choice, shuffle
 from ..tools.common import letters
 from ..tools.decompose import single_decompose
 

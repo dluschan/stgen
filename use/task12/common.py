@@ -1,5 +1,6 @@
-from ..generator import BaseGenerator
-from ..ip import MaskedHostAddress, MaskedHostAddressDeterminated, MaskedHostAddressDeterminatedLimitedMask
+from use.tools.generator import BaseGenerator
+from use.tools.ip import MaskedHostAddress
+
 
 class Common(BaseGenerator):
     '''Задача номер 12'''

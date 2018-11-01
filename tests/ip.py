@@ -1,5 +1,5 @@
 import unittest
-from use.ip import *
+from use.tools.ip import *
 
 
 class TestIPv4(unittest.TestCase):

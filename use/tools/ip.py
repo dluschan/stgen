@@ -1,5 +1,5 @@
 from random import randint
-from .notation import transform
+from use.tools.notation import transform
 
 
 class Address:

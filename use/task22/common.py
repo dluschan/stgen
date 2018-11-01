@@ -1,4 +1,4 @@
-from use.task import BaseTask
+from use.tools.task import BaseTask
 from functools import reduce
 from random import *
 import abc

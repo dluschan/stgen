@@ -1,6 +1,5 @@
-from ..task import *
-from random import randint, choice, shuffle
-from math import log
+from use.tools.task import *
+
 
 class Task18(BaseTask):
     '''ЕГЭ по информатике - Задача номер 18'''
