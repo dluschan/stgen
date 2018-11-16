@@ -143,7 +143,7 @@ class MaskedHostAddress(HostAddress):
 
 	def hostnumber(self):
 		"""Возвращает номер по порядку компьютера в подсети."""
-		return self & self.hostmask()
+		return int(self & self.hostmask())
 
 	def neighbor(self, number):
 		"""Возвращает адрес соседнего компьютера в нашей подсети с номером по порядку number."""
