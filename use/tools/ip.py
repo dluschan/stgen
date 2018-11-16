@@ -90,7 +90,7 @@ class NetworkMask(Mask):
 		Если количество единиц не задаётся, оно выбирается случайно от 3 до 29 включительно."""
 		if ones is None:
 			ones = randint(3, 29)
-		super().__init__(int('1' * ones + '0' * (Address.bits - ones), 2))
+		super().__init__(int('1' * ones + '0' * (self.bits - ones), 2))
 
 
 class HostMask(Mask):
