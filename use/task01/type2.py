@@ -7,14 +7,14 @@ class Type2(Task1):
 		super().__init__()
 		self.base, self.degree = self.linked()
 		self.question = 'Определите количество целых решений неравенства {inequality}.'
-		self.answer = randint(1, 1000)
+		self.distance = randint(1, 1000)
 		left = transform(self.number, self.base, based=True)
-		right = transform(self.number + self.answer + 1, self.base ** self.degree, based=True)
+		right = transform(self.number + self.distance + 1, self.base ** self.degree, based=True)
 		self.left_sign = randint(0, 1)
 		self.right_sign = randint(0, 1)
 		letter = 'αβγδεζηθικλμνξοπρστυφχψω'
-		signs = ['\lt', '\leqslant']
-		self.inequality = self.latex(left + signs[self.left_sign] + letter + signs[self.right_sign] + right)
+		signs = [' \lt ', ' \leqslant ']
+		self.inequality = self.latex(left + signs[self.left_sign] + choice(letter) + signs[self.right_sign] + right)
 
 	def category(self):
 		return super().category() + 'Тип 2'
@@ -23,5 +23,5 @@ class Type2(Task1):
 		return self.question.format(inequality=self.inequality)
 
 	def question_answer(self):
-		return self.answer + self.left_sign + self.right_sign
+		return self.distance + self.left_sign + self.right_sign
 
