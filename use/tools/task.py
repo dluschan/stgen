@@ -1,4 +1,4 @@
-from use.tools.tag import create_tag
+from .tag import create_tag
 from abc import abstractmethod
 from hashlib import sha1
 import hmac

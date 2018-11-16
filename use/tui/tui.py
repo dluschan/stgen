@@ -1,6 +1,6 @@
 import urwid
-from use.tools.generator import MainGenerator
-from use.tools.task import BaseTask
+from ..tools.generator import MainGenerator
+from ..tools.task import BaseTask
 
 
 def all_subclasses(cls):
