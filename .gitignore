@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# IDE configuration
+.idea/
+
+# Build package
+build
+dist
+use.egg-info
+
+# Compile ready tasks
+output.xml
+
+# Gramma for logic equation
+parser.out
+parsetab.py
