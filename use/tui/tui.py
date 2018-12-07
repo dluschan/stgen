@@ -20,7 +20,7 @@ def menu(title, choices):
 
 
 def process(button, output):
-	print(MainGenerator(choiced).generate(), file = open(output.get_edit_text(), 'w'))
+	print(MainGenerator(choiced).generate(), file=open(output.get_edit_text(), 'w'))
 
 
 def click_ok(checkbox, button):
@@ -47,11 +47,11 @@ def main():
 	urwid.MainLoop(top, palette=[('reversed', 'standout', '')]).run()
 
 
-choices = list(filter(lambda g: g.__subclasses__() == [], all_subclasses(BaseTask)))
+choices = [g for g in all_subclasses(BaseTask) if g.__subclasses__() == []]
 choices_list = list(map(str, choices))
 choiced = {}
 mainMenu = urwid.Padding(menu('Question types', choices_list), left=2, right=2)
-top = urwid.Overlay(mainMenu, urwid.SolidFill(u'\N{MEDIUM SHADE}'),
+top = urwid.Overlay(mainMenu, urwid.SolidFill('\N{MEDIUM SHADE}'),
 					align='center', width=('relative', 60),
 					valign='middle', height=('relative', 60),
 					min_width=20, min_height=9)
