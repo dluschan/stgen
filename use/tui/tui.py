@@ -33,7 +33,10 @@ def click_ok(checkbox, button):
 
 
 def item_chosen(checkbox, choice, param):
-	choiced[choices[choices_list.index(param)]] = choice
+	if choice:
+		choiced[choices[choices_list.index(param)]] = choice
+	else:
+		del choiced[choices[choices_list.index(param)]]
 
 
 def exit_program(button):
