@@ -1,5 +1,5 @@
 import unittest
-from use.tools.decompose import *
+from stgen.tools.decompose import *
 
 class TestDecompose(unittest.TestCase):
 	def test_empty(self):

@@ -1,8 +1,8 @@
 import unittest
-from use.tools.systemeq import SystemEquation
-from use.tools.boolean import *
-from use.task23.compile import parse
-from use.task23.type0 import Type0
+from stgen.tools.systemeq import SystemEquation
+from stgen.tools.boolean import *
+from stgen.task23.compile import parse
+from stgen.task23.type0 import Type0
 
 
 class SystemEquationViewTest(unittest.TestCase):

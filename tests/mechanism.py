@@ -1,5 +1,5 @@
 import unittest
-from use.task22.common import *
+from stgen.task22.common import *
 
 
 class MechanismCommandTest(unittest.TestCase):

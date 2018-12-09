@@ -12,12 +12,12 @@ setup(
 	long_description=long_description,
 	url='https://github.com/dluschan/stgen',
 	packages=find_packages(),
-	keywords='informatics task problem exam use moodle',
+	keywords='ЕГЭ информатика',
 	install_requires=['urwid', 'ply'],
 	test_suite='tests',
 	entry_points={
 		'console_scripts': [
-			'use = use.tui.tui:main'
+			'stgen = stgen.tui.tui:main'
 		],
 	},
 	classifiers=[
