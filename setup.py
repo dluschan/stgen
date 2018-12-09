@@ -1,15 +1,18 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
-	name='use',
+	name='stgen',
 	version='0.1.0',
 	author='Dmitry Luschan',
 	author_email = 'dluschan@gmail.com',
-	description='Package for generate questions for informatics USE (moodle format).',
-	long_description='',
-	url='https://github.com/dluschan/use',
+	description='School tasks generator',
+	long_description=long_description,
+	url='https://github.com/dluschan/stgen',
 	packages=find_packages(),
-	keywords='info informatics use exam',
+	keywords='informatics task problem exam use moodle',
 	install_requires=['urwid', 'ply'],
 	test_suite='tests',
 	entry_points={
