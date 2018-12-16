@@ -1,50 +1,64 @@
 from .common import *
 from math import log
+from random import sample
 
 
 class Type5(Task16):
-	"""Превод чисел в разные системы счисления."""
+	"""Составление минимальных и максимальных чисел в разных системах счисления с дополнительными условиями."""
 	def __init__(self):
 		super().__init__()
-		self.question = 'Определите наименьшее {sign} {based}, запись которого {base} содержит ровно {repeats} цифр {digit}. В ответ запишите искомое {based}.'
-		self.type = 'Тип 5/подтип A'
+		self.question = """Определите {extrem} {width} число {baseTarget}, запись которого {baseLimit} содержит 
+		ровно {repeats} {digit}. В ответ запишите искомое число {baseTarget}."""
+		self.limit = 10
 		self.base = randint(2, 6)
-		self.degree = randint(2, int(log(36, self.base)))
-		self.repeats = randint(3, 6)
-		self.digit = choice(self.digits[1:self.base])
-		self.width = randint((self.repeats + self.degree - 1) // self.degree, (self.repeats + self.degree - 1) // self.degree + 3)
-		self.number = int(self.digit * self.repeats, self.base)
-		if self.number < (self.base ** self.degree) ** (self.width - 1):
-			self.number += (self.base ** self.degree) ** (self.width - 1)
+		self.degreeTarget, self.degreeLimit = sample(range(1, int(log(36, self.base)) + 1), 2)
+		self.repeats = randint(1, self.limit // self.degreeLimit)
+		self.digit = randint(0, self.base ** self.degreeLimit - 1)
+		base_width = (self.repeats - 1) * self.degreeLimit + len(transform(self.digit, self.base))
+		if not self.digit:
+			base_width += 1
+		min_width = (base_width + self.degreeTarget - 1) // self.degreeTarget
+		self.width = randint(min_width, min_width + 3)
+
+	def category(self):
+		return super().category() + 'Тип 5/'
 
 	def sign(self, n):
 		assert(0 < n < 21)
-		return self.signs[n] + self.suffix_sing
+		return self.order[n] + self.sign_suffix
 
 	def question_text(self):
-		return self.question.format(m = self.latex(self.width), bigbase = self.latex(str(self.base ** self.degree)), base = self.latex(str(self.base)), repeats = self.latex(str(self.repeats)), digit = self.latex(str(self.digit)))
+		return self.question.format(
+			extrem=self.extrem,
+			width=self.sign(self.width),
+			baseTarget=self.notation(self.base ** self.degreeTarget),
+			baseLimit=self.notation(self.base ** self.degreeLimit),
+			repeats=self.latex(self.repeats) + ' ' + self.digits_word(self.repeats),
+			digit=self.latex(self.digits[self.digit])
+		)
 
 	def question_answer(self):
-		return transform(self.number, self.base ** self.degree, self.digits)
+		return transform(self.number, self.base ** self.degreeTarget, self.digits)
 
 
-class Type5a(Task16):
-	"""Превод чисел в разные системы счисления."""
+class SubtypeA(Type5):
+	"""Минимальное n-значное число, которое содержит заданное количество цифр."""
 	def __init__(self):
 		super().__init__()
-		self.question = 'Определите наименьшее число содержащее {m} цифр в системе счисления с основанием {bigbase}, запись которого в системе счисления с основанием {base} содержит ровно {repeats} цифр {digit}. Ответ укажите в системе счисления с основанием {bigbase}.'
-		self.type = 'Тип 5/Подтип A'
-		self.base = randint(2, 6)
-		self.degree = randint(2, int(log(36, 4)))
-		self.repeats = randint(3, 8)
-		self.digit = choice(self.digits[1:self.base])
-		self.width = randint((self.repeats + self.degree - 1) // self.degree, (self.repeats + self.degree - 1) // self.degree + 4)
-		self.number = int(self.digit * self.repeats, self.base)
-		if self.number < (self.base ** self.degree) ** (self.width - 1):
-			self.number += (self.base ** self.degree) ** (self.width - 1)
+		self.extrem = 'минимальное'
+		self.number = minLimitedNumber(self.base, self.degreeTarget, self.width, self.degreeLimit, self.digit, self.repeats)
 
-	def question_text(self):
-		return self.question.format(m = self.latex(self.width), bigbase = self.latex(str(self.base ** self.degree)), base = self.latex(str(self.base)), repeats = self.latex(str(self.repeats)), digit = self.latex(str(self.digit)))
+	def category(self):
+		return super().category() + 'Подтип A'
 
-	def question_answer(self):
-		return transform(self.number, self.base ** self.degree, self.digits)
+
+class SubtypeB(Type5):
+	"""Максимальное n-значное число, которое содержит заданное количество цифр."""
+	def __init__(self):
+		super().__init__()
+		self.extrem = 'максимальное'
+		self.number = maxLimitedNumber(self.base, self.degreeTarget, self.width, self.degreeLimit, self.digit, self.repeats)
+
+	def category(self):
+		return super().category() + 'Подтип B'
+

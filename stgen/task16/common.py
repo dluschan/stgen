@@ -1,6 +1,6 @@
 from math import log
 from random import choice, randint
-from ..tools.notation import transform
+from ..tools.notation import transform, minLimitedNumber, maxLimitedNumber
 from ..tools.task import *
 
 
@@ -14,12 +14,22 @@ class Task16(BaseTask):
 		self.sign_suffix = 'значное'
 		self.base = choice(list(range(2, 10)) + list(range(11, 37)))
 
+	@staticmethod
+	def digits_word(n):
+		assert(0 <= n <= 20)
+		if n == 1:
+			return 'цифру'
+		elif n < 5:
+			return 'цифры'
+		else:
+			return 'цифр'
+
 	def category(self):
 		return super().category() + 'Задача 16/'
 
 	def notation(self, base):
-		assert(1 < base < 37)
-		return self.notations[base] + ' системе счисления' if base in self.notations else 'системе счисления с основанием ' + self.latex(base)
+		assert 1 < base < 37, base
+		return 'в ' + self.notations[base] + ' системе счисления' if base in self.notations else 'в системе счисления с основанием ' + self.latex(base)
 
 	def linked(self):
 		base = randint(2, 6)
