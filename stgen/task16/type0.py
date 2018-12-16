@@ -9,7 +9,7 @@ class Type0(Task16):
 		self.question = 'Запись числа {number} в некоторой системе счисления выглядит как {view}. Найдите основание этой системы счисления.'
 
 	def category(self):
-		return super().category() + 'Тип 0'
+		return super().category() + 'Тип 0/'
 
 	def question_text(self):
 		return self.question.format(number=self.latex(self.number), view=self.latex(transform(self.number, self.base)))
