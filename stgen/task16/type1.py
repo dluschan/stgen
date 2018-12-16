@@ -11,7 +11,7 @@ class Type1(Task16):
 		self.question = 'Определите систему счисления {letter}, в которой верно тождество {equation}.'
 
 	def category(self):
-		return super().category() + 'Тип 1'
+		return super().category() + 'Тип 1/'
 
 	def question_text(self):
 		return self.question.format(letter=self.latex(self.letter), equation=self.latex(self.equation))
@@ -36,13 +36,13 @@ class SubtypeA(Type1):
 
 
 class SubtypeB(Type1):
-	"""Определение системы счисления чисел с помощью линейного уравнения."""
+	"""Определение системы счисления чисел с помощью квадратного уравнения."""
 	def __init__(self):
 		super().__init__()
 		a = choice([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5])
-		a = choice([-5, -4, -3, -2, -1, 0, 1])
-		b = -a*(self.base + x_2)
-		c = a * self.base * x_2
+		root = -randint(1, 10)
+		b = -a*(self.base + root)
+		c = a * self.base * root
 		num = decompose([a, b, c], self.base - 1)
 		left = ' + '.join(map(lambda x, y, z: self.digits[x] + self.digits[y] + self.digits[z] + '_{' + self.letter + '}', num[0][0], num[1][0], num[2][0]))
 		right = ' + '.join(map(lambda x, y, z: self.digits[x] + self.digits[y] + self.digits[z] + '_{' + self.letter + '}', num[0][1], num[1][1], num[2][0]))
