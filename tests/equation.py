@@ -114,7 +114,7 @@ class BracedTest(unittest.TestCase):
 
 	def test_parse_and_print(self):
 		self.assertEqual(str(parse('(x1 & x2) | x3 == 1')), '(x1 & x2) | x3 == 1')
-		self.assertEqual(repr(parse('(x1 & x2) | x3 == 1')), '\\left(x_{1} \\wedge x_{2}\\right) \\vee x_{3} \\equiv 1')
+		self.assertEqual(repr(parse('(x1 & x2) | x3 == 1')), '\\left( x_{1} \\wedge x_{2} \\right) \\vee x_{3} \\equiv 1')
 
 
 if __name__ == "__main__":

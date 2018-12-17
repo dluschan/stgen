@@ -6,28 +6,8 @@ class Term:
 	pass
 
 
-class Brackets(Term):
-	"""Скобки, используются для повышения приоритета логической операции."""
-	priority = 4
-
-	def __init__(self, *args):
-		assert(len(args) == 1)
-		self.args = args
-
-	def __repr__(self):
-		return '\\left(' + repr(self.args[0]) + '\\right)'
-
-	def __str__(self):
-		return '(' + str(self.args[0]) + ')'
-
-	def __call__(self, **kwargs):
-		return self.args[0](**kwargs)
-
-
 class Variable(Term):
 	"""Логическая переменная."""
-	priority = 5
-
 	def __init__(self, name):
 		assert(type(name) == str)
 		self.family = name[0]
@@ -51,10 +31,7 @@ class Variable(Term):
 
 class Constant(Term):
 	"""Логическая константа."""
-	priority = 5
-
-	def __init__(self):
-		pass
+	pass
 
 
 class TrueConst(Constant):
@@ -85,9 +62,7 @@ class LogicOperation(Term):
 
 
 class UnaryLogicOperation(LogicOperation):
-	"""Базовый класс для унарных логических операций."""
-	priority = 4
-
+	"""Базовый класс для унарных логических операций и скобок."""
 	def __init__(self, *args):
 		assert(len(args) == 1)
 		self.args = args
@@ -122,10 +97,21 @@ class Negation(UnaryLogicOperation):
 		return not a
 
 
+class Brackets(UnaryLogicOperation):
+	"""Скобки, используются для повышения приоритета логической операции."""
+	@staticmethod
+	def operation(a):
+		return a
+
+	def __repr__(self):
+		return '\\left(' + ' ' + repr(self.args[0]) + ' ' + '\\right)'
+
+	def __str__(self):
+		return '(' + str(self.args[0]) + ')'
+
+
 class BinaryLogicOperation(LogicOperation):
 	"""Базовый класс для бинарных логических операций."""
-	priority = 0
-
 	def __init__(self, *args):
 		assert(len(args) == 2)
 		self.args = args
@@ -142,7 +128,6 @@ class BinaryLogicOperation(LogicOperation):
 
 class Conjunction(BinaryLogicOperation):
 	"""Коньюнкция."""
-	priority = 3
 	repr = '\\wedge'
 	symbol = '&'
 
@@ -153,7 +138,6 @@ class Conjunction(BinaryLogicOperation):
 
 class Disjunction(BinaryLogicOperation):
 	"""Дизьюнкция."""
-	priority = 2
 	repr = '\\vee'
 	symbol = '|'
 
@@ -164,7 +148,6 @@ class Disjunction(BinaryLogicOperation):
 
 class Implication(BinaryLogicOperation):
 	"""Импликация."""
-	priority = 1
 	repr = '\\implies'
 	symbol = '->'
 
@@ -175,7 +158,6 @@ class Implication(BinaryLogicOperation):
 
 class Equal(BinaryLogicOperation):
 	"""Равенство."""
-	priority = 0
 	repr = '\\equiv'
 	symbol = '=='
 
@@ -186,7 +168,6 @@ class Equal(BinaryLogicOperation):
 
 class Notequal(BinaryLogicOperation):
 	"""Неравенство."""
-	priority = 0
 	repr = '\\neq'
 	symbol = '!='
 
@@ -242,7 +223,7 @@ def rterms(t, r):
 		pass
 	elif type(t) == Variable and t not in r:
 		r.append(t)
-	elif type(t) in UnaryLogicOperation.__subclasses__() + BinaryLogicOperation.__subclasses__() + [Brackets]:
+	elif type(t) in UnaryLogicOperation.__subclasses__() + BinaryLogicOperation.__subclasses__():
 		for arg in t.args:
 			rterms(arg, r)
 
