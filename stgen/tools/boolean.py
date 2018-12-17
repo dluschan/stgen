@@ -1,27 +1,31 @@
+"""Реализация логических констант, переменных, унарных и бинарных операций, скобок в логических выражениях."""
+
+
 class Term:
-	def braced(self, priority):
-		return '\\left(' + str(self) + '\\right)' if self.priority < priority else '{' + str(self) + '}'
+	"""Базовый класс для всех термов логического выражения."""
+	pass
 
 
 class Brackets(Term):
+	"""Скобки, используются для повышения приоритета логической операции."""
 	priority = 4
 
 	def __init__(self, *args):
 		assert(len(args) == 1)
 		self.args = args
 
-	def __str__(self):
-		return '(' + str(self.args[0]) + ')'
-
 	def __repr__(self):
 		return '\\left(' + repr(self.args[0]) + '\\right)'
 
-	@staticmethod
+	def __str__(self):
+		return '(' + str(self.args[0]) + ')'
+
 	def __call__(self, **kwargs):
 		return self.args[0](**kwargs)
 
 
 class Variable(Term):
+	"""Логическая переменная."""
 	priority = 5
 
 	def __init__(self, name):
@@ -46,6 +50,7 @@ class Variable(Term):
 
 
 class Constant(Term):
+	"""Логическая константа."""
 	priority = 5
 
 	def __init__(self):
@@ -53,6 +58,7 @@ class Constant(Term):
 
 
 class TrueConst(Constant):
+	"""Логическая истина."""
 	@staticmethod
 	def __repr__():
 		return '1'
@@ -63,6 +69,7 @@ class TrueConst(Constant):
 
 
 class FalseConst(Constant):
+	"""Логическая ложь."""
 	@staticmethod
 	def __repr__():
 		return '0'
@@ -73,10 +80,12 @@ class FalseConst(Constant):
 
 
 class LogicOperation(Term):
+	"""Базовый класс для логических операций."""
 	pass
 
 
 class UnaryLogicOperation(LogicOperation):
+	"""Базовый класс для унарных логических операций."""
 	priority = 4
 
 	def __init__(self, *args):
@@ -84,14 +93,19 @@ class UnaryLogicOperation(LogicOperation):
 		self.args = args
 
 	def __repr__(self):
-		return self.repr + self.args[0].braced(self.priority)
+		return self.repr + ' ' + repr(self.args[0])
+
+	def __str__(self):
+		return self.symbol + ' ' + str(self.args[0])
 
 	def __call__(self, **kwargs):
 		return self.operation(self.args[0](**kwargs))
 
 
 class Positive(UnaryLogicOperation):
+	"""Тривиальная обёртка над логическим термом."""
 	repr = ''
+	symbol = ''
 
 	@staticmethod
 	def operation(a):
@@ -99,7 +113,9 @@ class Positive(UnaryLogicOperation):
 
 
 class Negation(UnaryLogicOperation):
+	"""Отрицание."""
 	repr = '\\overline'
+	symbol = '!'
 
 	@staticmethod
 	def operation(a):
@@ -107,6 +123,7 @@ class Negation(UnaryLogicOperation):
 
 
 class BinaryLogicOperation(LogicOperation):
+	"""Базовый класс для бинарных логических операций."""
 	priority = 0
 
 	def __init__(self, *args):
@@ -114,18 +131,20 @@ class BinaryLogicOperation(LogicOperation):
 		self.args = args
 
 	def __repr__(self):
-		return self.args[0].braced(self.priority) + self.repr + self.args[1].braced(self.priority)
+		return repr(self.args[0]) + ' ' + self.repr + ' ' + repr(self.args[1])
 
 	def __str__(self):
-		return self.args[0].braced(self.priority) + self.symbol + self.args[1].braced(self.priority)
+		return str(self.args[0]) + ' ' + self.symbol + ' ' + str(self.args[1])
 
 	def __call__(self, **kwargs):
 		return self.operation(self.args[0](**kwargs), self.args[1](**kwargs))
 
 
 class Conjunction(BinaryLogicOperation):
+	"""Коньюнкция."""
 	priority = 3
 	repr = '\\wedge'
+	symbol = '&'
 
 	@staticmethod
 	def operation(a, b):
@@ -133,8 +152,10 @@ class Conjunction(BinaryLogicOperation):
 
 
 class Disjunction(BinaryLogicOperation):
+	"""Дизьюнкция."""
 	priority = 2
 	repr = '\\vee'
+	symbol = '|'
 
 	@staticmethod
 	def operation(a, b):
@@ -142,8 +163,10 @@ class Disjunction(BinaryLogicOperation):
 
 
 class Implication(BinaryLogicOperation):
+	"""Импликация."""
 	priority = 1
 	repr = '\\implies'
+	symbol = '->'
 
 	@staticmethod
 	def operation(a, b):
@@ -151,8 +174,10 @@ class Implication(BinaryLogicOperation):
 
 
 class Equal(BinaryLogicOperation):
+	"""Равенство."""
 	priority = 0
 	repr = '\\equiv'
+	symbol = '=='
 
 	@staticmethod
 	def operation(a, b):
@@ -160,8 +185,10 @@ class Equal(BinaryLogicOperation):
 
 
 class Notequal(BinaryLogicOperation):
+	"""Неравенство."""
 	priority = 0
 	repr = '\\neq'
+	symbol = '!='
 
 	@staticmethod
 	def operation(a, b):
@@ -215,7 +242,7 @@ def rterms(t, r):
 		pass
 	elif type(t) == Variable and t not in r:
 		r.append(t)
-	elif type(t) in UnaryLogicOperation.__subclasses__() + BinaryLogicOperation.__subclasses__():
+	elif type(t) in UnaryLogicOperation.__subclasses__() + BinaryLogicOperation.__subclasses__() + [Brackets]:
 		for arg in t.args:
 			rterms(arg, r)
 
