@@ -1,5 +1,5 @@
 from math import log
-from random import choice, randint
+from random import choice, randint, sample
 from ..tools.notation import transform, minLimitedNumber, maxLimitedNumber
 from ..tools.task import *
 
