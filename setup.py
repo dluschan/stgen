@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
-    long_description = fh.read()
+	long_description = fh.read()
 
 setup(
 	name='stgen',
-	version='0.2.1',
+	version='0.3.0',
 	author='Dmitry Luschan',
-	author_email = 'dluschan@gmail.com',
+	author_email='dluschan@gmail.com',
 	description='School tasks generator',
 	long_description=long_description,
 	url='https://github.com/dluschan/stgen',
