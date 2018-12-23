@@ -30,7 +30,7 @@ class Type6(Task16):
 			self.terms.append(self.terms.pop(0))
 
 	def category(self):
-		return super().category() + 'Тип 6/'
+		return super().category() + 'Тип 6'
 
 	def question_text(self):
 		expression = ' '.join([self.convert(*p, self.source_base) for p in self.terms])[2:]

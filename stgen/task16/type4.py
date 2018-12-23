@@ -33,7 +33,7 @@ class Type4(Task16):
 		self.tail_expr = ' '.join(['-+'[self.tail_sign[i]] + ' ' + str(self.tail[i]) for i in range(self.tail_count)])
 
 	def category(self):
-		return super().category() + 'Тип 4/'
+		return super().category() + 'Тип 4'
 
 	def question_text(self):
 		return self.question.format(

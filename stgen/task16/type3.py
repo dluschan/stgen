@@ -44,7 +44,7 @@ class SubtypeA(Type3):
 		self.subtype_question = "Определите слово, которое стоит под номером {row}.".format(row=self.row)
 
 	def category(self):
-		return super().category() + 'Подтип A/'
+		return super().category() + 'Подтип A'
 
 	def question_answer(self):
 		return transform(self.row + 1, self.count, self.letters)
@@ -62,7 +62,7 @@ class SubtypeB(Type3):
 		)
 
 	def category(self):
-		return super().category() + 'Подтип B/'
+		return super().category() + 'Подтип B'
 
 	def question_answer(self):
 		return int((self.prefix + self.letters[0] * (self.width - self.determinate)).translate(self.dict), self.count) + 1
@@ -77,7 +77,7 @@ class SubtypeC(Type3):
 		self.subtype_question = "Определите номер слова {word}.".format(word=self.word)
 
 	def category(self):
-		return super().category() + 'Подтип С/'
+		return super().category() + 'Подтип С'
 
 	def question_answer(self):
 		return int(self.word.translate(self.dict), self.count) + 1

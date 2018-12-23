@@ -34,7 +34,7 @@ class SubtypeA(Type2):
 		super().__init__()
 
 	def category(self):
-		return super().category() + 'Подтип A/'
+		return super().category() + 'Подтип A'
 
 	def question_answer(self):
 		return ''.join(map(str, [self.suffix + self.base ** self.width * k for k in range(self.top + 1)]))
@@ -48,7 +48,7 @@ class SubtypeB(Type2):
 		super().__init__()
 
 	def category(self):
-		return super().category() + 'Подтип B/'
+		return super().category() + 'Подтип B'
 
 	def question_answer(self):
 		return self.top + 1
