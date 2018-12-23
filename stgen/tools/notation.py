@@ -13,11 +13,11 @@ def transform(x, n, digits='0123456789abcdefghijklmnopqrstuvwxyz', based=False, 
 		result = digits[x % n] + result
 		x //= n
 	if not result:
-		result += '0'
+		result += digits[0]
 	if width and width > len(result):
 		result = digits[0] * (width - len(result)) + result
 	if based:
-		result += '_' + '{' + str(n) + '}'
+		result += '_{' + str(n) + '}'
 	return result
 
 
