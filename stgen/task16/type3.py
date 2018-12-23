@@ -47,7 +47,7 @@ class SubtypeA(Type3):
 		return super().category() + 'Подтип A'
 
 	def question_answer(self):
-		return transform(self.row + 1, self.count, self.letters)
+		return transform(self.row - 1, self.count, self.letters)
 
 
 class SubtypeB(Type3):
@@ -73,7 +73,7 @@ class SubtypeC(Type3):
 
 	def __init__(self):
 		super().__init__()
-		self.word = choice(self.letters[1:]) + ''.join(choices(self.letters, k=self.count - 1))
+		self.word = choice(self.letters[1:]) + ''.join(choices(self.letters, k=self.width - 1))
 		self.subtype_question = "Определите номер слова {word}.".format(word=self.word)
 
 	def category(self):
