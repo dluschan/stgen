@@ -1,6 +1,7 @@
 import unittest
 from stgen.tools.decompose import *
 
+
 class TestDecompose(unittest.TestCase):
 	def test_empty(self):
 		self.assertEqual(positive(150, 2, 10), set())
@@ -76,3 +77,33 @@ class TestDecompose(unittest.TestCase):
 			self.assertEqual(sum(res[0][0]) - sum(res[0][1]), x)
 			self.assertTrue(all([y > 0 for y in res[0][0]]))
 			self.assertTrue(all([y > 0 for y in res[0][1]]))
+
+	@unittest.skip("Реализовать разоложение чисел на слагаемые, включая нули")
+	def test_overflow(self):
+		for _ in range(10000):
+			self.base = randint(3, 37)
+			a = choice(list(range(1, 6)))
+			k = int(self.base ** 2 * a / (self.base ** 2 - 1) + 1)
+			l1 = - self.base * a - k * (self.base - 1)
+			r1 = - self.base * a + k * (self.base - 1)
+			l2 = - k * (self.base - 1) / self.base
+			r2 = k * (self.base - 1) / self.base
+			x2_q = [x2 for x2 in range(int(max(l1, l2) - 1), int(min(r1, r2) + 1)) if l1 <= x2 <= r1 and l2 <= x2 <= r2]
+			log = "x1 = {x1}, a = {a}, k = {k}, l1 = {l1}, r1 = {r1}, l2 = {l2}, r2 = {r2}, x2 = {x2}".format(
+				x1=self.base, a=a, l1=l1, r1=r1, l2=l2, r2=r2, x2=x2_q, k=k
+			)
+			assert x2_q, log
+			p = choice(x2_q)
+			b = - a * self.base - p
+			c = self.base * p
+			log += ", p = {p}, b = {b}, c = {c}".format(p=p, b=b, c=c)
+			assert abs(a) <= k * (self.base - 1), log
+			assert abs(b) <= k * (self.base - 1), log
+			assert abs(c) <= k * (self.base - 1), log
+			num = signed_decompose([a, b, c], self.base - 1)
+			assert len(num) == 3, log + ' ' + str(num)
+			assert len(num[0]) == len(num[1]) == len(num[2]) == 2, log + ' ' + str(num)
+			assert len(num[0][0]) == len(num[1][0]) == len(num[2][0]), log + ' ' + str(num)
+			assert len(num[0][1]) == len(num[1][1]) == len(num[2][1]), log + ' ' + str(num)
+			assert len(num[0][0]) <= k + 1, log + ' ' + str(num)
+			assert len(num[0][1]) <= k + 1, log + ' ' + str(num)
