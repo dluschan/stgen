@@ -5,7 +5,7 @@ from math import log
 
 
 class Type0(Task05):
-	"""Поиск системы счисления числа."""
+	"""Кодирование букв в разных системах счисления."""
 	def __init__(self):
 		super().__init__()
 		self.base = randint(2, 6)
@@ -18,7 +18,7 @@ class Type0(Task05):
 		self.code = int(''.join((transform(self.letters.index(letter), self.base, width=self.width) for letter in self.word)), self.base)
 
 	def category(self):
-		return super().category() + 'Тип 0/'
+		return super().category() + 'Тип 0'
 
 	def question_text(self):
 		return self.question.format(
