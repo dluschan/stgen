@@ -1,9 +1,6 @@
+from ..tools.task import BaseTask
 from random import randint, choice, shuffle
 import subprocess
-import json
-import sys
-import hmac
-import hashlib
 
 
 def horizontal(x):
@@ -70,14 +67,6 @@ def dot_graph(g, s):
 	return res
 
 
-def task(n, s):
-	"""Функция генерирует текст вопроса"""
-	return """На рисунке - схема дорог, связывающих города {cites}. 
-	По каждой дороге можно двигаться только в одном направлении, указанном стрелкой.
-	Сколько существует различных путей из города {begin} в город {end}?
-	""".format(cites=', '.join(s[:n]), begin=s[0], end=s[n-1])
-
-
 def dict_graph(links):
 	"""Функция преобразовывает граф из списка связей в список списков"""
 	res = {}
@@ -102,21 +91,27 @@ def dot(g, s):
 	).stdout.read().decode('utf-8')
 
 
-def generate():
-	s = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
-	r = {"category": "ЕГЭ по информатике задача 15", "question_type": "numerical", "questions": []}
-	for i in range(10 if len(sys.argv) == 1 else int(sys.argv[1])):
-		n = randint(10, 18)
-		g = graph(n)
-		r["questions"].append(
-			{
-				"question_name": "Задача №" + hmac.new(
-					bytearray(dot_graph(g, s), 'utf-8'),
-					bytearray('text', 'utf-8'), hashlib.sha1
-				).hexdigest(),
-				"question_text": task(n, s),
-				"question_media": dot(g, s),
-				"question_answer": solve(dict_graph(g), 0, n - 1)
-			}
-		)
-	return json.dumps(r)
+class Task15(BaseTask):
+	"""Поиск количества путей на графе."""
+	def __init__(self):
+		self.s = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+		self.n = randint(10, 18)
+		self.g = graph(self.n)
+		self.question = """На рисунке - схема дорог, связывающих города {cites}.
+			По каждой дороге можно двигаться только в одном направлении, указанном стрелкой.
+			Сколько существует различных путей из города {begin} в город {end}? {graph}"""
+
+	def category(self):
+		return super().category() + 'Задача 15/'
+
+	def question_text(self):
+		return self.question.format(cites=', '.join(self.s[:self.n]), begin=self.s[0], end=self.s[self.n-1], graph=dot(self.g, self.s))
+
+	def question_answer(self):
+		return solve(dict_graph(self.g), 0, self.n - 1)
+
+	def question_type(self):
+		return 'numerical'
+
+	def cdata(self):
+		return True
