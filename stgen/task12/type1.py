@@ -12,7 +12,7 @@ class Type1(Task12):
         return Task12.category(self) + 'Тип 1'
 
     def question_text(self):
-        question = " Для узла с IP-адресом {host} адрес сети равен {network}. Определите чему равен {order} байт маски. Ответ запишите в виде десятичного числа."
+        question = "Для узла с IP-адресом {host} адрес сети равен {network}. Определите чему равен {order} байт маски. Ответ запишите в виде десятичного числа."
         return Task12.question_text(self) + question.format(**{'host': self.latex(self.task.host()), 'network': self.latex(self.task.network()), 'order': choice(self.order[self.byte])})
 
     def question_answer(self):
