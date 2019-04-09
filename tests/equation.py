@@ -194,5 +194,18 @@ class NormalForm(unittest.TestCase):
 		)
 
 
+class ParseExpr(unittest.TestCase):
+	def test_0(self):
+		s = '(w0 | y0) & (w0 | z0) & (x0 | y0)'
+		t = parse(s)
+		l = [str(d) for d in get_disjunctions_from_conjuction(t)]
+		self.assertEqual(l, ['w0 | y0', 'w0 | z0', 'x0 | y0'])
+
+	def test_1(self):
+		s = 'w0 | y0 | x2 | ! t4'
+		l = [str(t) for t in get_primary_terms_from_disjunctios(parse(s))]
+		self.assertEqual(l, ['w0', 'y0', 'x2', '! t4'])
+
+
 if __name__ == "__main__":
 	unittest.main()

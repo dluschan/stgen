@@ -465,6 +465,26 @@ def brackets(term):
 		return term
 
 
+def get_disjunctions_from_conjuction(term):
+	"""get list disjunctions from term. term - conjunctive normal form expression"""
+	if type(term) == Conjunction:
+		return get_disjunctions_from_conjuction(term.args[0]) + get_disjunctions_from_conjuction(term.args[1])
+	elif type(term) == Brackets:
+		return [term.args[0]]
+	elif type(term) == Disjunction:
+		return [term]
+	else:
+		return [term]
+
+
+def get_primary_terms_from_disjunctios(term):
+	"""get list term from term. term - disjunctios normal form expression"""
+	if type(term) == Disjunction:
+		return get_primary_terms_from_disjunctios(term.args[0]) + get_primary_terms_from_disjunctios(term.args[1])
+	else:
+		return [term]
+
+
 def cnf(term):
 	"""conjunctive normal form"""
 	return brackets(multi_simplify_disjunction_of_conjunction(simplify_negation(
