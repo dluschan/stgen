@@ -292,3 +292,181 @@ def varlist(t):
 	z = analyze(t)
 	return [key + str(order) for key in z for order in z[key]]
 
+
+def simplify_not_equality(term):
+	"""simplify not equality:
+
+	replace "x != y" with "(!x & y) | (x & !y)"
+	"""
+	if type(term) == Notequal:
+		return Disjunction(
+			Conjunction(Negation(simplify_not_equality(term.args[0])), simplify_not_equality(term.args[1])),
+			Conjunction(simplify_not_equality(term.args[0]), Negation(simplify_not_equality(term.args[1]))),
+		)
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(simplify_not_equality, term.args))
+	else:
+		return term
+
+
+def simplify_equality(term):
+	"""simplify equality:
+
+	replace "x == y" with "(!x | y) & (x | !y)"
+	"""
+	if type(term) == Equal:
+		return Conjunction(
+			Disjunction(Negation(simplify_equality(term.args[0])), simplify_equality(term.args[1])),
+			Disjunction(simplify_equality(term.args[0]), Negation(simplify_equality(term.args[1]))),
+		)
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(simplify_equality, term.args))
+	else:
+		return term
+
+
+def simplify_implication(term):
+	"""simplify implication:
+
+	replace "x -> y" with "!x | y"
+	"""
+	if type(term) == Implication:
+		return Disjunction(Negation(simplify_implication(term.args[0])), simplify_implication(term.args[1]))
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(simplify_implication, term.args))
+	else:
+		return term
+
+
+def simplify_negation(term):
+	"""simplify negation:
+
+	replace "!!x" with "x"
+	replace "!(x | y)" with "!x & !y"
+	replace "!(x & y)" with "!x | !y"
+	"""
+	if type(term) == Negation and type(term.args[0]) == Negation:
+		return simplify_negation(term.args[0].args[0])
+	elif type(term) == Negation and type(term.args[0]) == Conjunction:
+		return Disjunction(
+			simplify_negation(Negation(term.args[0].args[0])),
+			simplify_negation(Negation(term.args[0].args[1]))
+		)
+	elif type(term) == Negation and type(term.args[0]) == Disjunction:
+		return Conjunction(
+			simplify_negation(Negation(term.args[0].args[0])),
+			simplify_negation(Negation(term.args[0].args[1]))
+		)
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(simplify_negation, term.args))
+	else:
+		return term
+
+
+def simplify_disjunction_of_conjunction(term):
+	"""
+	simplify disjunction of conjunction
+
+	replace "(x & y) | z" with "(x | z) & (y | z)"
+	replace "x | (y & z)" with "(x | y) & (x | z)"
+	"""
+	if type(term) == Disjunction and type(term.args[0]) == Conjunction:
+		return Conjunction(
+			Disjunction(
+				simplify_disjunction_of_conjunction(term.args[0].args[0]),
+				simplify_disjunction_of_conjunction(term.args[1])
+			),
+			Disjunction(
+				simplify_disjunction_of_conjunction(term.args[0].args[1]),
+				simplify_disjunction_of_conjunction(term.args[1])
+			)
+		)
+	elif type(term) == Disjunction and type(term.args[1]) == Conjunction:
+		return Conjunction(
+			Disjunction(
+				simplify_disjunction_of_conjunction(term.args[0]),
+				simplify_disjunction_of_conjunction(term.args[1].args[0])
+			),
+			Disjunction(
+				simplify_disjunction_of_conjunction(term.args[0]),
+				simplify_disjunction_of_conjunction(term.args[1].args[1])
+			)
+		)
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(simplify_disjunction_of_conjunction, term.args))
+	else:
+		return term
+
+
+def simplify_conjunction_of_disjunction(term):
+	"""
+	simplify conjunction of disjunction
+
+	replace "(x | y) & z" with "(x & z) | (y & z)"
+	replace "x & (y | z)" with "(x & y) | (x & z)"
+	"""
+	if type(term) == Conjunction and type(term.args[0]) == Disjunction:
+		return Disjunction(
+			Conjunction(
+				simplify_conjunction_of_disjunction(term.args[0].args[0]),
+				simplify_conjunction_of_disjunction(term.args[1])
+			),
+			Conjunction(
+				simplify_conjunction_of_disjunction(term.args[0].args[1]),
+				simplify_conjunction_of_disjunction(term.args[1])
+			)
+		)
+	elif type(term) == Conjunction and type(term.args[1]) == Disjunction:
+		return Disjunction(
+			Conjunction(
+				simplify_conjunction_of_disjunction(term.args[0]),
+				simplify_conjunction_of_disjunction(term.args[1].args[0])
+			),
+			Conjunction(
+				simplify_conjunction_of_disjunction(term.args[0]),
+				simplify_conjunction_of_disjunction(term.args[1].args[1])
+			)
+		)
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(simplify_conjunction_of_disjunction, term.args))
+	else:
+		return term
+
+
+def multi_simplify_disjunction_of_conjunction(term):
+	"""apply many times simplify_conjunction_of_disjunction"""
+	while simplify_disjunction_of_conjunction(term) != term:
+		term = simplify_disjunction_of_conjunction(term)
+	return term
+
+
+def multi_simplify_conjunction_of_disjunction(term):
+	"""apply many times simplify_conjunction_of_disjunction"""
+	while simplify_conjunction_of_disjunction(term) != term:
+		term = simplify_conjunction_of_disjunction(term)
+	return term
+
+
+def unbrackets(term):
+	"""remove brackets from term"""
+	if type(term) == Brackets:
+		return unbrackets(term.args[0])
+	elif isinstance(term, LogicOperation):
+		return type(term)(*map(unbrackets, term.args))
+	else:
+		return term
+
+
+def brackets(term):
+	"""place brackets into term"""
+	if isinstance(term, LogicOperation):
+		return type(term)(*map(lambda t: Brackets(brackets(t)) if t.priority < term.priority else brackets(t), term.args))
+	else:
+		return term
+
+
+def cnf(term):
+	"""conjunctive normal form"""
+	return brackets(multi_simplify_disjunction_of_conjunction(simplify_negation(
+		simplify_implication(simplify_equality(simplify_not_equality(unbrackets(term))))))
+	)
