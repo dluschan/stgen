@@ -117,5 +117,82 @@ class BracedTest(unittest.TestCase):
 		self.assertEqual(repr(parse('(x1 & x2) | x3 == 1')), '\\left( x_{1} \\wedge x_{2} \\right) \\vee x_{3} \\equiv 1')
 
 
+class NormalForm(unittest.TestCase):
+	def test_0(self):
+		s = 'x1 & x2'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), 'x1 & x2')
+
+	def test_1(self):
+		s = 'x1 -> x2'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '! x1 | x2')
+
+	def test_2(self):
+		s = 'x1 | x2'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), 'x1 | x2')
+
+	def test_3(self):
+		s = 'x1 & x2 | x3'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(x1 | x3) & (x2 | x3)')
+
+	def test_4(self):
+		s = '(x0 -> y0) -> (z0 -> !x0)'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(x0 | ! z0 | ! x0) & (! y0 | ! z0 | ! x0)')
+
+	def test_5(self):
+		s = 'x0 == y0'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(! x0 | y0) & (x0 | ! y0)')
+
+	def test_6(self):
+		s = 'x0 -> y0 & z0'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(! x0 | y0) & (! x0 | z0)')
+
+	def test_7(self):
+		s = 'x0 & (y0 | z0)'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), 'x0 & (y0 | z0)')
+
+	def test_8(self):
+		s = 't0 | (x0 & (y0 | z0))'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(t0 | x0) & (t0 | y0 | z0)')
+
+	def test_9(self):
+		s = '(x0 -> y0) & ((!y0 -> z0) -> !x0)'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(! x0 | y0) & (! y0 | ! x0) & (! z0 | ! x0)')
+
+	def test_10(self):
+		s = '(w0 & x0) | (y0 & z0)'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(str(n), '(w0 | y0) & (w0 | z0) & (x0 | y0) & (x0 | z0)')
+
+	def test_11(self):
+		s = '((w0 & x0) | (y0 & z0)) & ((a0 & b0) | (c0 & d0))'
+		t = parse(s)
+		n = cnf(t)
+		self.assertEqual(
+			str(n),
+			'(w0 | y0) & (w0 | z0) & (x0 | y0) & (x0 | z0) & (a0 | c0) & (a0 | d0) & (b0 | c0) & (b0 | d0)'
+		)
+
+
 if __name__ == "__main__":
 	unittest.main()
