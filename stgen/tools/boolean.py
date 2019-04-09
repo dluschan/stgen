@@ -6,6 +6,54 @@ class Term:
 	pass
 
 
+class Membership(Term):
+	"""Принадлежность переменной множеству."""
+	priority = 7
+
+	def __init__(self, element, container):
+		self.element = element
+		self.container = container
+
+	def __repr__(self):
+		return '(' + self.element + ' \\in ' + self.container + ')'
+
+	def __str__(self):
+		return '(' + self.element + ' ∈ ' + self.container + ')'
+
+	def __call__(self, **kwargs):
+		return kwargs[str(self)]
+
+	def __hash__(self):
+		return hash(str(self))
+
+	def __eq__(self, other):
+		return self.element == other.element and self.container == other.container
+
+
+class NotMembership(Term):
+	"""Не принадлежность переменной множеству."""
+	priority = 7
+
+	def __init__(self, element, container):
+		self.element = element
+		self.container = container
+
+	def __repr__(self):
+		return '(' + self.element + ' \\notin ' + self.container + ')'
+
+	def __str__(self):
+		return '(' + self.element + ' ∉ ' + self.container + ')'
+
+	def __call__(self, **kwargs):
+		return kwargs[str(self)]
+
+	def __hash__(self):
+		return hash(str(self))
+
+	def __eq__(self, other):
+		return self.element == other.element and self.container == other.container
+
+
 class Variable(Term):
 	"""Логическая переменная."""
 	priority = 7
