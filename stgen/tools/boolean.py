@@ -8,6 +8,8 @@ class Term:
 
 class Variable(Term):
 	"""Логическая переменная."""
+	priority = 7
+
 	def __init__(self, name):
 		assert(type(name) == str)
 		self.family = name[0]
@@ -31,7 +33,7 @@ class Variable(Term):
 
 class Constant(Term):
 	"""Логическая константа."""
-	pass
+	priority = 7
 
 
 class TrueConst(Constant):
@@ -79,6 +81,7 @@ class UnaryLogicOperation(LogicOperation):
 
 class Positive(UnaryLogicOperation):
 	"""Тривиальная обёртка над логическим термом."""
+	priority = 5
 	repr = ''
 	symbol = ''
 
@@ -89,6 +92,7 @@ class Positive(UnaryLogicOperation):
 
 class Negation(UnaryLogicOperation):
 	"""Отрицание."""
+	priority = 5
 	repr = '\\overline'
 	symbol = '!'
 
@@ -99,6 +103,8 @@ class Negation(UnaryLogicOperation):
 
 class Brackets(UnaryLogicOperation):
 	"""Скобки, используются для повышения приоритета логической операции."""
+	priority = 6
+
 	@staticmethod
 	def operation(a):
 		return a
@@ -128,6 +134,7 @@ class BinaryLogicOperation(LogicOperation):
 
 class Conjunction(BinaryLogicOperation):
 	"""Коньюнкция."""
+	priority = 4
 	repr = '\\wedge'
 	symbol = '&'
 
@@ -138,6 +145,7 @@ class Conjunction(BinaryLogicOperation):
 
 class Disjunction(BinaryLogicOperation):
 	"""Дизьюнкция."""
+	priority = 3
 	repr = '\\vee'
 	symbol = '|'
 
@@ -148,6 +156,7 @@ class Disjunction(BinaryLogicOperation):
 
 class Implication(BinaryLogicOperation):
 	"""Импликация."""
+	priority = 2
 	repr = '\\implies'
 	symbol = '->'
 
@@ -158,6 +167,7 @@ class Implication(BinaryLogicOperation):
 
 class Equal(BinaryLogicOperation):
 	"""Равенство."""
+	priority = 1
 	repr = '\\equiv'
 	symbol = '=='
 
@@ -168,6 +178,7 @@ class Equal(BinaryLogicOperation):
 
 class Notequal(BinaryLogicOperation):
 	"""Неравенство."""
+	priority = 1
 	repr = '\\neq'
 	symbol = '!='
 
