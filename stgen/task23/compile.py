@@ -89,7 +89,7 @@ def p_expression_equal(t):
 
 def p_expression_notequal(t):
 	"""expression : expression NOTEQUAL expression"""
-	t[0] = Notequal(t[1], t[3])
+	t[0] = NotEqual(t[1], t[3])
 
 
 def p_expression_group(t):

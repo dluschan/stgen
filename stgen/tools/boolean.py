@@ -225,7 +225,7 @@ class Equal(BinaryLogicOperation):
 		return a == b
 
 
-class Notequal(BinaryLogicOperation):
+class NotEqual(BinaryLogicOperation):
 	"""Неравенство."""
 	priority = 1
 	repr = '\\neq'
@@ -298,7 +298,7 @@ def simplify_not_equality(term):
 
 	replace "x != y" with "(!x & y) | (x & !y)"
 	"""
-	if type(term) == Notequal:
+	if type(term) == NotEqual:
 		return Disjunction(
 			Conjunction(Negation(simplify_not_equality(term.args[0])), simplify_not_equality(term.args[1])),
 			Conjunction(simplify_not_equality(term.args[0]), Negation(simplify_not_equality(term.args[1]))),

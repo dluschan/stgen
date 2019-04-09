@@ -5,7 +5,7 @@ from random import randint, choice, shuffle
 import itertools, functools, copy
 
 unary = [Positive, Negation]
-binary = [Conjunction, Disjunction, Implication, Equal, Notequal]
+binary = [Conjunction, Disjunction, Implication, Equal, NotEqual]
 
 
 def booltable(n, base = 2):

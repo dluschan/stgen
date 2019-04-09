@@ -1,5 +1,5 @@
 from .common import *
-from ..tools.boolean import BinaryLogicOperation, Conjunction, Disjunction, Implication, Equal, Notequal, Negation, Brackets
+from ..tools.boolean import BinaryLogicOperation, Conjunction, Disjunction, Implication, Equal, NotEqual, Negation, Brackets
 from ..tools.common import letters
 from random import choice, shuffle
 
@@ -33,7 +33,7 @@ class Type0(Homogeneous):
 		])
 		res = choice([
 			[[Equal, FalseConst], [Equal, TrueConst]],
-			[[Notequal, TrueConst], [Notequal, FalseConst]],
+			[[NotEqual, TrueConst], [NotEqual, FalseConst]],
 		])[view[2]]
 		shuffle(view[1])
 		shuffle(args)
@@ -87,7 +87,7 @@ class Type1(Homogeneous):
 		main = choice(BinaryLogicOperation.__subclasses__())
 		left = choice(BinaryLogicOperation.__subclasses__())
 		right = choice(BinaryLogicOperation.__subclasses__())
-		equal = choice([Equal, Notequal])
+		equal = choice([Equal, NotEqual])
 		result = choice(Constant.__subclasses__())
 		terms = choice([self.params1, self.params2, self.params3, self.params4])()
 		self.template = equal(main(Brackets(left(terms[0], terms[1])), Brackets(right(terms[2], terms[3]))), result())
