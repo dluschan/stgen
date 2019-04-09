@@ -60,7 +60,8 @@ class FalseConst(Constant):
 
 class LogicOperation(Term):
 	"""Базовый класс для логических операций."""
-	pass
+	def __eq__(self, other):
+		return type(self) == type(other) and self.args == other.args
 
 
 class UnaryLogicOperation(LogicOperation):
