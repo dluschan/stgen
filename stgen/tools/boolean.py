@@ -344,6 +344,8 @@ def simplify_negation(term):
 	replace "!!x" with "x"
 	replace "!(x | y)" with "!x & !y"
 	replace "!(x & y)" with "!x | !y"
+	replace "!(x ∈ A)" with "x ∉ A"
+	replace "!(x ∉ y)" with "x ∈ A"
 	"""
 	if type(term) == Negation and type(term.args[0]) == Negation:
 		return simplify_negation(term.args[0].args[0])
@@ -357,6 +359,10 @@ def simplify_negation(term):
 			simplify_negation(Negation(term.args[0].args[0])),
 			simplify_negation(Negation(term.args[0].args[1]))
 		)
+	elif type(term) == Negation and type(term.args[0]) == Membership:
+		return NotMembership(term.args[0].element, term.args[0].container)
+	elif type(term) == Negation and type(term.args[0]) == NotMembership:
+		return Membership(term.args[0].element, term.args[0].container)
 	elif isinstance(term, LogicOperation):
 		return type(term)(*map(simplify_negation, term.args))
 	else:
