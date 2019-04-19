@@ -98,7 +98,7 @@ class EqualAnalyze(unittest.TestCase):
 		self.assertEqual(analyze(eq), analyze(parse('x1 == x2')))
 
 	def test_varlist(self):
-		self.assertEqual(varlist(parse('x1 & x2 -> y1 | z2 == 1')), ['x1', 'x2', 'y1', 'z2'])
+		self.assertEqual(sorted(varlist(parse('x1 & x2 -> y1 | z2 == 1'))), ['x1', 'x2', 'y1', 'z2'])
 
 
 class Type0Test(unittest.TestCase):
@@ -206,6 +206,3 @@ class ParseExpr(unittest.TestCase):
 		l = [str(t) for t in get_primary_terms_from_disjunctios(parse(s))]
 		self.assertEqual(l, ['w0', 'y0', 'x2', '! t4'])
 
-
-if __name__ == "__main__":
-	unittest.main()

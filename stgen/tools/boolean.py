@@ -119,7 +119,7 @@ class UnaryLogicOperation(LogicOperation):
 		self.args = args
 
 	def __repr__(self):
-		return self.repr + ' ' + repr(self.args[0])
+		return self.repr + '{' + repr(self.args[0]) + '}'
 
 	def __str__(self):
 		return self.symbol + ' ' + str(self.args[0])
