@@ -1,5 +1,6 @@
 """Реализация логических констант, переменных, унарных и бинарных операций, скобок в логических выражениях."""
 
+from random import randint
 
 class Term:
 	"""Базовый класс для всех термов логического выражения."""
@@ -496,3 +497,61 @@ def cnf(term):
 	return brackets(multi_simplify_disjunction_of_conjunction(simplify_negation(
 		simplify_implication(simplify_equality(simplify_not_equality(unbrackets(term))))))
 	)
+
+
+def get_available(term):
+	if type(term) == Negation and isinstance(term.args[0], LogicOperation) or isinstance(term.args[0], BinaryLogicOperation):
+		return [term] + [t for a in term.args for t in get_available(a)]
+	else:
+		return []
+
+
+def mutation(term):
+	if isinstance(term, LogicOperation):
+		term.args = [mutation(arg) for arg in term.args]
+		if randint(0, 4):
+			return type(term)(*term.args)
+		elif type(term) == Disjunction:
+			t = randint(0, 2)
+			if t == 0:
+				return Implication(Negation(term.args[0]), term.args[1])
+			elif t == 1:
+				return Disjunction(term.args[0], Conjunction(Negation(term.args[0]), term.args[1]))
+			elif t == 2:
+				return Negation(Conjunction(Negation(term.args[0]), Negation(term.args[1])))
+		elif type(term) == Conjunction:
+			t = randint(0, 1)
+			if t == 0:
+				return Conjunction(term.args[0], Disjunction(Negation(term.args[0]), term.args[1]))
+			elif t == 1:
+				return Negation(Disjunction(Negation(term.args[0]), Negation(term.args[1])))
+		elif type(term) == Implication:
+			t = randint(0, 0)
+			if t == 0:
+				return Disjunction(Negation(term.args[0]), term.args[1])
+		elif type(term) == Equal:
+			t = randint(0, 1)
+			if t == 0:
+				return Conjunction(Implication(term.args[0], term.args[1]), Implication(term.args[0], term.args[1]))
+			elif t == 1:
+				return Conjunction(Disjunction(Negation(term.args[0]), term.args[1]), Disjunction(Negation(term.args[0]), term.args[1]))
+		elif type(term) == NotEqual:
+			t = randint(0, 1)
+			if t == 0:
+				return Negation(Conjunction(Implication(term.args[0], term.args[1]), Implication(term.args[0], term.args[1])))
+			elif t == 1:
+				return Disjunction(Conjunction(Negation(term.args[0]), term.args[1]), Conjunction(Negation(term.args[0]), term.args[1]))
+		elif type(term) == Negation and type(term.args[0]) == Disjunction:
+			return Conjunction(Negation(term.args[0].args[0]), Negation(term.args[0].args[1]))
+		elif type(term) == Negation and type(term.args[0]) == Conjunction:
+			return Disjunction(Negation(term.args[0].args[0]), Negation(term.args[0].args[1]))
+		elif type(term) == Negation and type(term.args[0]) == Implication:
+			return Disjunction(term.args[0].args[0], Negation(term.args[0].args[1]))
+		elif type(term) == Negation and type(term.args[0]) == Equal:
+			return Disjunction(Conjunction(Negation(term.args[0]), term.args[1]), Conjunction(Negation(term.args[0]), term.args[1]))
+		elif type(term) == Negation and type(term.args[0]) == NotEqual:
+			return Conjunction(Disjunction(Negation(term.args[0]), term.args[1]), Disjunction(Negation(term.args[0]), term.args[1]))
+		else:
+			return type(term)(*term.args)
+	else:
+		return term
