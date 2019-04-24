@@ -170,7 +170,7 @@ class Type1(Task18):
 			self.fun.append(w)
 		self.fun = reduce(Conjunction, [reduce(Disjunction, [t for t in c]) for c in self.fun])
 		assert x.lower != -inf and x.upper != inf, "Failed segment"
-		if y.lower == -inf and y.upper == inf:
+		if y.lower == -inf and y.upper == inf and y != ~empty():
 			if x.is_empty():
 				self.ans = max(map(lambda s: s.upper - s.lower, (p for p in ~y)))
 			else:
