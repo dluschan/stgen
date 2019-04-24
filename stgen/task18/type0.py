@@ -3,7 +3,7 @@ from functools import reduce
 from intervals import open, closed, openclosed, closedopen, empty, inf
 from .common import *
 from ..tools.common import letters
-from ..tools.boolean import Membership, NotMembership, Conjunction, Disjunction, cnf, get_disjunctions_from_conjuction, get_primary_terms_from_disjunctios
+from ..tools.boolean import Membership, NotMembership, Conjunction, Disjunction, mutation, brackets
 from ..tools.choices import choices
 from ..tools.boolequation import random_function
 
@@ -191,7 +191,7 @@ class Type1(Task18):
 	def question_text(self):
 		return self.question.format(
 			segments=self.latex((', '.join(s + ' = ' + str(self.used_segments[s]) for s in self.used_segments))),
-			expr=self.latex(repr(self.fun))
+			expr=self.latex(repr(brackets(mutation(self.fun))))
 		)
 
 	def question_answer(self):
