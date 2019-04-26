@@ -5,7 +5,6 @@ from .common import *
 from ..tools.common import letters
 from ..tools.boolean import Membership, NotMembership, Conjunction, Disjunction, mutation, brackets
 from ..tools.choices import choices
-from ..tools.boolequation import random_function
 
 
 class Type0(Task18):
@@ -101,11 +100,13 @@ class Type1(Task18):
 
 	def __init__(self):
 		super().__init__()
-		self.question = """На числовой прямой даны отрезки: {segments}."""
+		self.question = """На числовой прямой даны отрезки: {segments}.
+		Определеите {extrem_type} длину такого отрезка {unknown_segment}, 
+		что выражение {expr} истинно при любом значении переменной {var_name}."""
 
 		#1 выбрать имя искомого отрезка
-		unknown = letters.upper()[0]
-		var_name = 'x'
+		self.unknown_segment = letters.upper()[0]
+		self.var_name = "x"
 
 		#2 выбрать имена всем интервалам
 		segment_amount = randint(2, 10)
@@ -114,27 +115,31 @@ class Type1(Task18):
 		regular_segments_name = segments_name[:segment_amount]
 		extra_segments_name = segments_name[segment_amount:]
 
-		#3 по точкам сгенерировать интервалы: отрезки и лучи
+		#3 сгенерировать интервалы
 		regular_segments = [[name, self.random_segment()] for name in regular_segments_name]
 
 		#4 сгенерировать для каждого интервала пару соответствующих термов принадлежности
-		regular_terms = [[segment_name, segment, membertype(var_name, segment_name)]
+		regular_terms = [[segment_name, segment, membertype(self.var_name, segment_name)]
 			for membertype in [Membership, NotMembership] for segment_name, segment in regular_segments]
-		term_amount = randint(2, 10)
+		term_amount = randint(3, 10)
 
 		#5 сгенерировать случайную функцию от термов
-		self.used_terms = choices(regular_terms, k=term_amount)
-		self.used_segments = {t[0]: t[1] for t in self.used_terms}
-		self.extra_segments = {}
+		shuffle(regular_terms)
+		regular_terms = regular_terms[:term_amount]
+
+		self.used_segments = {}
 		extra_terms = []
 		x, y = empty(), empty()
 		self.fun = []
-		for i in range(randint(2, 4)):
-			u = choice([Membership, NotMembership])(var_name, unknown)
+		factors = randint(2, 3)
+		for i in range(factors):
+			u = choice([Membership, NotMembership])(self.var_name, self.unknown_segment)
 			w = [u]
 			res_seg = ~empty()
-			for j in range(randint(2, 4)):
-				term = choice(self.used_terms)
+			shuffle(regular_terms)
+			factor_lenght = randint(2, 8 // factors)
+			for term in regular_terms[:factor_lenght]:
+				self.used_segments[term[0]] = term[1]
 				w.append(term[2])
 				res_seg &= term[1] if type(term[2]) == NotMembership else ~term[1]
 			if type(u) == NotMembership:
@@ -143,8 +148,8 @@ class Type1(Task18):
 				if not z.is_empty():
 					extra_segment = self.random_not_intersect_segment(z)
 					extra_name, *extra_segments_name = extra_segments_name
-					self.extra_segments[extra_name] = extra_segment
-					extra_terms.append([extra_name, extra_segment, NotMembership(var_name, extra_name)])
+					self.used_segments[extra_name] = extra_segment
+					extra_terms.append([extra_name, extra_segment, NotMembership(self.var_name, extra_name)])
 					w.append(extra_terms[-1][2])
 					res_seg &= extra_segment
 				y |= res_seg
@@ -152,8 +157,8 @@ class Type1(Task18):
 				if res_seg.lower == -inf or res_seg.upper == inf:
 					extra_segment = self.random_segment()
 					extra_name, *extra_segments_name = extra_segments_name
-					self.extra_segments[extra_name] = extra_segment
-					extra_terms.append([extra_name, extra_segment, NotMembership(var_name, extra_name)])
+					self.used_segments[extra_name] = extra_segment
+					extra_terms.append([extra_name, extra_segment, NotMembership(self.var_name, extra_name)])
 					w.append(extra_terms[-1][2])
 					res_seg &= extra_segment
 				z = (x | res_seg).to_atomic() & y
@@ -161,12 +166,13 @@ class Type1(Task18):
 				if not z.is_empty():
 					extra_segment = self.random_not_intersect_segment(z)
 					extra_name, *extra_segments_name = extra_segments_name
-					self.extra_segments[extra_name] = extra_segment
-					extra_terms.append([extra_name, extra_segment, NotMembership(var_name, extra_name)])
+					self.used_segments[extra_name] = extra_segment
+					extra_terms.append([extra_name, extra_segment, NotMembership(self.var_name, extra_name)])
 					w.append(extra_terms[-1][2])
 					res_seg &= extra_segment
 				x |= res_seg
 				assert x.lower != -inf and x.upper != inf, "Failed x range"
+			shuffle(w)
 			self.fun.append(w)
 		self.fun = reduce(Conjunction, [reduce(Disjunction, [t for t in c]) for c in self.fun])
 		assert x.lower != -inf and x.upper != inf, "Failed segment"
@@ -175,15 +181,10 @@ class Type1(Task18):
 				self.ans = max(map(lambda s: s.upper - s.lower, (p for p in ~y)))
 			else:
 				self.ans = max(map(lambda s: s.upper - s.lower, (p for p in ~y if not (p & x).is_empty())))
-			self.question += """
-			Определеите максимальную длину такого отрезка A, что выражение {expr} истинно при любом значении переменной х.
-			"""
+			self.extrem_type = "максимальную"
 		else:
 			self.ans = 0 if x.is_empty() else x.upper - x.lower
-			self.question += """
-			Определеите минимальную длину такого отрезка A, что выражение {expr} истинно при любом значении переменной х.
-			"""
-		self.used_segments.update(self.extra_segments)
+			self.extrem_type = "минимальную"
 
 	def category(self):
 		return super().category() + 'Тип 1'
@@ -191,7 +192,10 @@ class Type1(Task18):
 	def question_text(self):
 		return self.question.format(
 			segments=self.latex((', '.join(s + ' = ' + str(self.used_segments[s]) for s in self.used_segments))),
-			expr=self.latex(repr(brackets(mutation(self.fun))))
+			expr=self.latex(repr(brackets(self.fun))),
+			extrem_type=self.extrem_type,
+			unknown_segment=self.unknown_segment,
+			var_name=self.var_name
 		)
 
 	def question_answer(self):
