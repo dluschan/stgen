@@ -9,61 +9,6 @@ from ..tools.choices import choices
 
 class Type0(Task18):
 	"""Определение искомого отрезка."""
-	def __init__(self):
-		super().__init__()
-		self.question = """На числовой прямой даны отрезки: {segments}.
-		Определите наименьшую длину такого отрезка A, что выражение {expr} истинно при любом значении переменной х."""
-		begin = randint(-100, 100)
-		length = randint(5, 50)
-		self.segments_amount = randint(2, 5)
-		self.segments_name = list(letters.upper()[1:])
-		shuffle(self.segments_name)
-		self.segments_name = self.segments_name[:self.segments_amount]
-		self.terms = [Membership('x', 'A')]
-		self.neg_amount = randint(1, self.segments_amount)
-		self.pos_amount = self.segments_amount - self.neg_amount
-		self.segment_terms = {}
-		self.A = ~empty()
-		self.Q = []
-		for Q in self.segments_name[:self.neg_amount]:
-			left = randint(0, 50)
-			right = randint(0, 50)
-			self.segment_terms[Q] = closed(begin - left, begin + length + right)
-			self.terms.append(NotMembership('x', Q))
-			self.A &= closed(begin - left, begin + length + right)
-		self.pos_right = randint(0, self.pos_amount)
-		self.pos_left = self.pos_amount - self.pos_right
-		self.P = []
-		for P in self.segments_name[self.neg_amount:self.neg_amount + self.pos_right]:
-			left = randint(0, 50)
-			right = left + randint(0, 50)
-			self.segment_terms[P] = closed(begin + length + left, begin + length + right)
-			self.terms.append(Membership('x', P))
-			self.A -= closed(begin + length + left, begin + length + right)
-		for P in self.segments_name[self.neg_amount + self.pos_right:]:
-			left = randint(0, 50)
-			right = left + randint(0, 50)
-			self.segment_terms[P] = closed(begin - right, begin - left)
-			self.terms.append(Membership('x', P))
-			self.A -= closed(begin - right, begin - left)
-		shuffle(self.terms)
-		self.system = reduce(Disjunction, self.terms)
-
-	def category(self):
-		return super().category() + 'Тип 0'
-
-	def question_text(self):
-		return self.question.format(
-			segments=', '.join(s + ' = ' + str(self.segment_terms[s]) for s in self.segment_terms),
-			expr=self.latex(repr(self.system))
-		)
-
-	def question_answer(self):
-		return self.A.upper - self.A.lower
-
-
-class Type1(Task18):
-	"""Определение искомого отрезка."""
 	def random_interval(self, a=-100, b=100):
 		return choices((self.random_segment, self.random_beam, self.unbounded_interval), (85, 10, 5), k=1)[0](a, b)
 
@@ -174,7 +119,7 @@ class Type1(Task18):
 				assert x.lower != -inf and x.upper != inf, "Failed x range"
 			shuffle(w)
 			self.fun.append(w)
-		self.fun = reduce(Conjunction, [reduce(Disjunction, [t for t in c]) for c in self.fun])
+		self.fun = reduce(Conjunction, [mutation(reduce(Disjunction, [t for t in c])) for c in self.fun])
 		assert x.lower != -inf and x.upper != inf, "Failed segment"
 		if y.lower == -inf and y.upper == inf and y != ~empty():
 			if x.is_empty():
@@ -187,15 +132,15 @@ class Type1(Task18):
 			self.extrem_type = "минимальную"
 
 	def category(self):
-		return super().category() + 'Тип 1'
+		return super().category() + 'Тип 0'
 
 	def question_text(self):
 		return self.question.format(
 			segments=self.latex((', '.join(s + ' = ' + str(self.used_segments[s]) for s in self.used_segments))),
 			expr=self.latex(repr(brackets(self.fun))),
 			extrem_type=self.extrem_type,
-			unknown_segment=self.unknown_segment,
-			var_name=self.var_name
+			unknown_segment=self.latex(self.unknown_segment),
+			var_name=self.latex(self.var_name)
 		)
 
 	def question_answer(self):
