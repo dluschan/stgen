@@ -6,4 +6,5 @@ from . import task16
 from . import task18
 from . import task22
 from . import task23
+from . import task27
 from . import tui
