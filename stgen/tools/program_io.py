@@ -26,7 +26,7 @@ def parse_input(s, params):
 			s = s.split("|")
 			begin = "В "
 			num = ["первой ", "первых "] if i == 0 else ["следующей ", "следующих "]
-			end = (latex(s[1]) + num[1] + " строках " if len(s) > 1 else num[0] + "строке ") + "задаётся "
+			end = (latex(s[1]) + " " + num[1] + "строках " if len(s) > 1 else num[0] + "строке ") + "задаётся "
 			res += begin + end + parse_line(s[0], params)
 	return res.strip()
 
