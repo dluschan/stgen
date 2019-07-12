@@ -59,7 +59,7 @@ class BaseTask:
 
 	@staticmethod
 	def latex(element):
-		return '\( ' + str(element) + ' \)'
+		return '\\( ' + str(element) + ' \\)'
 
 	@staticmethod
 	def category():
