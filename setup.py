@@ -13,7 +13,7 @@ setup(
 	url='https://github.com/dluschan/stgen',
 	packages=find_packages(),
 	keywords='ЕГЭ информатика',
-	install_requires=['urwid', 'ply', 'python-intervals'],
+	install_requires=['urwid', 'ply', 'python-intervals', 'huffman'],
 	test_suite='tests',
 	entry_points={
 		'console_scripts': [
