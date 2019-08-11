@@ -13,10 +13,8 @@ class Task05(BaseTask):
 		cyrillic_small = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 		greek_big = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"
 		greek_small = "αβγδεζηθικλμνξοπρστυφχψω"
-		self.letters = ''.join(sorted(sample(
-			choice([latin_big, latin_small, cyrillic_big, cyrillic_small, greek_big, greek_small]),
-			self.count
-		)))
+		self.alphabetic = choice([latin_big, latin_small, cyrillic_big, cyrillic_small, greek_big, greek_small])
+		self.letters = ''.join(sorted(sample(self.alphabetic, self.count)))
 
 	def notation(self, base):
 		assert 1 < base < 37, base
