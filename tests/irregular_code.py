@@ -42,6 +42,12 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(len(x['C']), 3)
 		self.assertEqual(len(x['D']), 3)
 
+	def test_5(self):
+		letters = ('A', 'B', 'C', 'D', 'E', 'F')
+		frequency = (1, 1, 0, 0, 0)
+		x = code(letters, frequency)
+		self.assertEqual([1, 2, 3, 4, 4], sorted(list(map(len, x.values()))))
+
 
 if __name__ == '__main__':
 	unittest.main()
