@@ -1,9 +1,7 @@
-from ..tools.notation import transform
 from ..tools.choices import choices
-from ..tools.irregular_code import code, codebook
-from collections import Counter
-from random import sample, choice, shuffle
-from .common import *
+from ..tools.irregular_code import code
+from random import choice, randint, sample, shuffle
+from .common import Task05
 
 
 class Type1(Task05):
@@ -90,13 +88,14 @@ class SubtypeC(Type1):
 	"""Восстановление кода нескольких букв для оптимального кодирования заданного слова."""
 	def __init__(self):
 		super().__init__()
-		self.table = code(self.letters)
+		self.frequency = sample(range(100), len(self.letters))
+		self.table = code(self.letters, self.frequency)
 		self.ans = sum(map(len, self.table.values()))
-		self.hidden = randint(self.count // 2 - 1, self.count // 2 + 1)
-		for _ in range(self.hidden):
-			self.table.popitem()
+		self.hidden = randint(max(1, self.count // 2 - 1), self.count // 2 + 1)
+		for key, item in sorted(self.table.items(), key=lambda x: len(x[1]))[-self.hidden:]:
+			self.table.pop(key)
 		self.letters = list(self.letters)
-		self.question = """Для кодирования некоторой последовательности, состоящей из букв {letters}, 
+		self.question = """Для кодирования некоторой последовательности, состоящей из букв {letters},
 		решили использовать неравномерный двоичный код, удовлетворяющий условию Фано.
 		{definite} Укажите какая наименьшая возможная суммарная длина всех кодовых слов."""
 
@@ -118,7 +117,7 @@ class SubtypeD(Type1):
 	def __init__(self):
 		super().__init__()
 		self.frequency = choices(range(1, 6), k=len(self.letters))
-		self.absent = randint(self.count // 3 - 1, self.count // 3 + 1)
+		self.absent = randint(max(1, self.count // 3 - 1), self.count // 3 + 1)
 		self.frequency = self.frequency[:-self.absent] + [0] * self.absent
 		self.table = code(self.letters, self.frequency)
 		r = []

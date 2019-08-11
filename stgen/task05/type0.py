@@ -1,7 +1,8 @@
 from ..tools.notation import transform
 from ..tools.choices import choices
-from .common import *
+from .common import Task05
 from math import log
+from random import randint
 
 
 class Type0(Task05):
