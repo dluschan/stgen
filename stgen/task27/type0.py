@@ -4,6 +4,7 @@ from random import randint
 
 class Type0(Task27):
 	def __init__(self):
+		super().__init__()
 		self.test_size = 5
 		self.params = {
 			'n': [int, [1, 10 ** 4], 'количество пар чисел'],
