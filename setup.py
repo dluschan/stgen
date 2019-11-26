@@ -17,7 +17,7 @@ setup(
 	test_suite='tests',
 	entry_points={
 		'console_scripts': [
-			'stgen = stgen.tui.tui:main'
+			'stgen = stgen.main:main'
 		],
 	},
 	classifiers=[

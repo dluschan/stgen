@@ -20,7 +20,7 @@ def menu(title, choices):
 
 
 def process(button, output):
-	print(MainGenerator(choiced).generate(), file=open(output.get_edit_text(), 'w'))
+	print(MainGenerator(choiced).generate(10), file=open(output.get_edit_text(), 'w'))
 
 
 def click_ok(checkbox, button):

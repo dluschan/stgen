@@ -5,7 +5,7 @@ class MainGenerator:
 	def __init__(self, clses):
 		self.clses = clses
 
-	def generate(self):
+	def generate(self, count):
 		doc = create_tag()
 		quiz = create_tag('quiz')
 		doc.appendChild(quiz)
@@ -13,7 +13,7 @@ class MainGenerator:
 		for task_type in self.clses:
 			task_generator = task_type()
 			quiz.appendChild(task_generator.get_type_tag())
-			for _ in range(10):
+			for _ in range(count):
 				task_generator = task_type()
 				quiz.appendChild(task_generator.get_task_tag())
 		return doc.toprettyxml()
