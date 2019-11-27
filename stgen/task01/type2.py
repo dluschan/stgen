@@ -1,7 +1,7 @@
 from .common import *
 
 
-class Type2(Task1):
+class Type2(Task01):
 	"""Решение неравенств в различных системах счисления."""
 	def __init__(self):
 		super().__init__()

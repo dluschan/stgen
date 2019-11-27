@@ -2,7 +2,7 @@ from .common import *
 from collections import Counter
 
 
-class Type1(Task1):
+class Type1(Task01):
 	"""Определение показателей, связанных с цифрами чисел в разных системах счисления."""
 	def __init__(self):
 		super().__init__()

@@ -4,7 +4,7 @@ from random import randint, choice
 from math import log
 
 
-class Task1(BaseTask):
+class Task01(BaseTask):
     """ЕГЭ по информатике - Задача номер 1"""
     def __init__(self):
         self.number = randint(10**3, 2**15)

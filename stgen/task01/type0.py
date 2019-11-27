@@ -1,7 +1,7 @@
 from .common import *
 
 
-class Type0(Task1):
+class Type0(Task01):
     """Превод чисел в разные системы счисления."""
     def __init__(self):
         super().__init__()
