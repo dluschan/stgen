@@ -1,4 +1,5 @@
 import argparse
+import pdb
 from .tui import tui
 from .tools.generator import MainGenerator
 from .tools.task import BaseTask, CodeRunnerTask
@@ -15,6 +16,7 @@ def createParser():
     batch_parser.add_argument('--task', '-t', nargs='+', type=int, required=True)
     batch_parser.add_argument('--count', '-c', type=int, required=True)
     batch_parser.add_argument('--output', '-o', type=argparse.FileType(mode='w', bufsize=-1, encoding=None, errors=None), required=True)
+    batch_parser.add_argument('--debug', '-d', action='store_true', default=False)
     interactive_parser = subparsers.add_parser('tui')
     return parser
 
@@ -22,6 +24,8 @@ def createParser():
 def batch(namespace):
     choiced = []
     clses = {cls.__name__.split('.')[1] if cls.__name__.count('.') else cls.__name__: cls for cls in BaseTask.__subclasses__() + CodeRunnerTask.__subclasses__()}
+    if namespace.debug:
+        pdb.set_trace()
     for t in namespace.task:
         class_name = 'Task' + str(t).zfill(2)
         choiced += [g for g in all_subclasses(clses[class_name]) if g.__subclasses__() == []]
