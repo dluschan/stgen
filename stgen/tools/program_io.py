@@ -14,7 +14,7 @@ def parse_line(s, params):
 
 
 def parse_input(s, params):
-	res = "Формат входных данных\n"
+	res = "<br>Формат входных данных<br>"
 	p = s.split("\n")
 	if len(p) == 0:
 		res = "Программа не получает входные данные"
@@ -33,7 +33,7 @@ def parse_input(s, params):
 
 
 def parse_output(s, params):
-	res = "Формат выходных данных\n"
+	res = "<br>Формат выходных данных<br>"
 	p = s.split("\n")
 	if len(p) == 0:
 		res = "Программа не выводит данные"
