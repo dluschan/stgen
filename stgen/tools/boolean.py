@@ -55,6 +55,30 @@ class NotMembership(Term):
 		return self.element == other.element and self.container == other.container
 
 
+class Divisibility(Term):
+	"""Делимость двух чисел."""
+	priority = 7
+
+	def __init__(self, element, divisor):
+		self.element = element
+		self.divisor = divisor
+
+	def __repr__(self):
+		return '(' + self.element + ' \\vdots ' + self.divisor + ')'
+
+	def __str__(self):
+		return '(' + self.element +' ⋮ ' + self.divisor + ')'
+
+	def __call__(self, **kwargs):
+		return kwargs[str(self)]
+
+	def __hash__(self):
+		return hash(str(self))
+
+	def __eq__(self, other):
+		return self.element == other.element and self.divisor == other.divisor
+
+
 class Variable(Term):
 	"""Логическая переменная."""
 	priority = 7
