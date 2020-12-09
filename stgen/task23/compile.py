@@ -16,17 +16,17 @@ tokens = (
 )
 
 # Tokens
-t_TERM        = r'[a-zA-Z][0-9][0-9]*'
-t_FALSE       = r'0'
-t_TRUE        = r'1'
-t_NEGATION    = r'!'
+t_TERM		  = r'[a-zA-Z][0-9][0-9]*'
+t_FALSE		  = r'0'
+t_TRUE		  = r'1'
+t_NEGATION	  = r'!'
 t_CONJUNCTION = r'&'
 t_DISJUNCTION = r'\|'
 t_IMPLICATION = r'->'
-t_EQUAL       = r'=='
-t_NOTEQUAL    = r'\!='
-t_LPAREN      = '\('
-t_RPAREN      = '\)'
+t_EQUAL		  = r'=='
+t_NOTEQUAL	  = r'\!='
+t_LPAREN	  = '\('
+t_RPAREN	  = '\)'
 
 
 # Ignored characters

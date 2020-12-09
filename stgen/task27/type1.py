@@ -22,7 +22,7 @@ n = int(input())
 ma, mb, mab, mab2, mn = [0] * 5
 for _ in range(n):
 	x = int(input())
-	if   x % a == 0 and x % b == 0:
+	if	 x % a == 0 and x % b == 0:
 		if x > mab:
 			mab, mab2 = x, mab
 		elif x > mab2:
