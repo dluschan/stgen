@@ -1,5 +1,5 @@
 from itertools import product
-from random import shuffle, randint
+from random import shuffle, randint, randrange
 from ..tools.common import letters
 
 class Field:
@@ -20,6 +20,7 @@ class Field:
 	]
 	"""
 	def __init__(self, r, c = None, hw = None, vw = None, closed = True):
+		self.goal = None
 		self.rows = r
 		if c is None:
 			c = r
@@ -204,6 +205,59 @@ class CornerRobot(Robot):
 			except AssertionError:
 				continue
 			if self.pos == self.goal:
+				res += 1
+		return res
+
+
+class CircleRobot(Robot):
+	"""
+	Робот, который ходит по кругу.
+	
+	Поведение - двухбитовое число. Младший бит - направление проверки: 0 - вперёд, 1 - вбок; старший бит - направление круга: 0 - против часовой стрелки, 1 - по часовой стрелке.
+	"""
+	class Algorithm:
+		def __init__(self, mode):
+			self.movies = ['up', 'left', 'down', 'right']
+			if mode // 2:
+				self.movies = self.movies[::-1]
+			# случайное смещение движений
+			k = randrange(4)
+			self.movies = self.movies[k:] + self.movies[:k]
+			self.look = ["free_" + m for m in self.movies]
+			# смещаем направление взгляда на один такт
+			if mode % 2:
+				k = 3
+				self.look = self.look[k:] + self.look[:k]
+
+			self.code = ""
+			for check, go in zip(self.look, self.movies):
+				self.code += f"""while {check}():\n"""
+				self.code += f"""    {go}()\n"""
+
+		def __str__(self):
+			return self.code
+
+	def __init__(self, field):
+		self.field = field
+		self.algo = CircleRobot.Algorithm(randrange(4))
+
+	def count(self):
+		res = 0
+		for x, y in product(range(self.field.rows), range(self.field.cols)):
+			self.pos = [x, y]
+			try:
+				up = self.up
+				left = self.left
+				down = self.down
+				right = self.right
+				free_up = self.free_up
+				free_left = self.free_left
+				free_down = self.free_down
+				free_right = self.free_right
+				exec(self.algo.code)
+			except AssertionError:
+				continue
+			if self.pos == [x, y]:
 				res += 1
 		return res
 

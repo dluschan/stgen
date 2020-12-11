@@ -1,6 +1,6 @@
 from random import randrange, randint, choice
 from .common import Task14
-from ..tools.maze import Field, CornerRobot
+from ..tools.maze import Field, CornerRobot, CircleRobot
 
 
 class Type0(Task14):
@@ -19,7 +19,7 @@ class Type0(Task14):
 """
 		self.size = 6, 6
 		m = 2 * self.size[0] * self.size[1] - self.size[0] - self.size[1]
-		walls = [(randrange(self.size[0]), randrange(self.size[1] - 1)) for _ in range(randint(m // 8, m // 5))]
+		walls = [(randrange(self.size[0]), randrange(self.size[1] - 1)) for _ in range(randint(m // 8, m // 3))]
 		k = randint(len(walls) // 3, 2 * len(walls) // 3)
 		hor_walls = walls[:k]
 		ver_walls = walls[k:]
@@ -44,4 +44,15 @@ class SubtypeA(Type0):
 
 	def category(self):
 		return super().category() + 'Подтип A'
+
+
+class SubtypeB(Type0):
+	"""Робот идёт по кругу."""
+	def __init__(self):
+		super().__init__()
+		self.robot = CircleRobot(self.field)
+		self.suffix = f""" и остановится в той же клетке, с которой он начал движение"""
+
+	def category(self):
+		return super().category() + 'Подтип B'
 
