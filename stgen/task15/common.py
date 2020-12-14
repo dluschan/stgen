@@ -1,6 +1,6 @@
-from ..tools.task import BaseTask
 from random import randint, choice, shuffle
-import subprocess
+import pydot
+from ..tools.task import BaseTask
 
 
 def horizontal(x):
@@ -60,11 +60,13 @@ def graph(n):
 
 def dot_graph(g, s):
 	"""Конвертирует граф в формат dot с переименованием вершин согласно строке s"""
-	res = 'digraph G {node [shape = circle]; rankdir = LR;'
-	for link in g:
-		res += s[link[0]] + '->' + s[link[1]] + ';'
-	res += '}'
-	return res
+	graph = pydot.Dot(graph_type='digraph', rankdir='LR')
+	node = pydot.Node('node')
+	node.set("shape", 'circle')
+	graph.add_node(node)
+	for a, b in g:
+		graph.add_edge(pydot.Edge(s[a], s[b]))
+	return graph
 
 
 def dict_graph(links):
@@ -84,11 +86,7 @@ def solve(links, start, end):
 
 
 def dot(g, s):
-	return subprocess.Popen(
-		"echo \"" + dot_graph(g, s) + "\" | dot -Tsvg",
-		shell=True,
-		stdout=subprocess.PIPE
-	).stdout.read().decode('utf-8')
+	return dot_graph(g, s).create(format='svg').decode('utf-8')
 
 
 class Task15(BaseTask):
