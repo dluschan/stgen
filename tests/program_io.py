@@ -7,14 +7,12 @@ class TestIOFormat(unittest.TestCase):
 	def test_input_0(self):
 		params = {'n': [int, [1, 10 ** 4], 'количество чисел']}
 		input_format = """n"""
-		self.assertEqual(parse_input(input_format, params), """Формат входных данных
-В единственной строке задаётся количество чисел \\( n \\).""")
+		self.assertEqual(parse_input(input_format, params), """<br>Формат входных данных<br>В единственной строке задаётся количество чисел \\( n \\).""")
 
 	def test_output_0(self):
 		params = {'s': [int, None, 'искомая сумма']}
 		output_format = """s"""
-		self.assertEqual(parse_output(output_format, params), """Формат выходных данных
-В единственной строке выводится искомая сумма \\( s \\).""")
+		self.assertEqual(parse_output(output_format, params), """<br>Формат выходных данных<br>В единственной строке выводится искомая сумма \\( s \\).""")
 
 	def test_input_1(self):
 		params = {
@@ -23,8 +21,7 @@ class TestIOFormat(unittest.TestCase):
 		}
 		input_format = """n
 x*n"""
-		self.assertEqual(parse_input(input_format, params), """Формат входных данных
-В первой строке задаётся количество чисел \\( n \\). В следующей строке задаётся \\( n \\) чисел \\( x \\).""")
+		self.assertEqual(parse_input(input_format, params), """<br>Формат входных данных<br>В первой строке задаётся количество чисел \\( n \\). В следующей строке задаётся \\( n \\) чисел \\( x \\).""")
 
 	def test_output_1(self):
 		params = {
@@ -32,8 +29,7 @@ x*n"""
 			's': [int, [1, 10 ** 4], 'высоты']
 		}
 		output_format = """s|k"""
-		self.assertEqual(parse_output(output_format, params), """Формат выходных данных
-В \\( k \\) строках выводятся высоты \\( s \\).""")
+		self.assertEqual(parse_output(output_format, params), """<br>Формат выходных данных<br>В \\( k \\) строках выводятся высоты \\( s \\).""")
 
 
 class TestInputGenerate(unittest.TestCase):

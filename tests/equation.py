@@ -16,7 +16,7 @@ class SystemEquationViewTest(unittest.TestCase):
 		self.assertEqual(str(FalseConst()), '0')
 
 	def test_negation(self):
-		self.assertEqual(repr(Negation(Variable('x1'))), '\overline x_{1}')
+		self.assertEqual(repr(Negation(Variable('x1'))), '\\overline{x_{1}}')
 
 	def test_implication(self):
 		self.assertEqual(str(Implication(Variable('x1'), Variable('x2'))), 'x1 -> x2')
