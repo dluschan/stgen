@@ -1,46 +1,9 @@
-from random import choice, randint, sample, shuffle
+from random import randint
 from pydot import graph_from_dot_data
 from pygraph.classes.digraph import digraph
 from pygraph.readwrite import dot
 from ..tools.task import BaseTask
-
-
-def horizontal(x):
-	""""Функция устанавливает горизонтальные (т.е. между вершинами одного слоя) связи в графе"""
-	k = randint(1, (len(x) + 1) // 2)
-	for i in sample(range(len(x) - 1), k):
-		yield (x[i], x[i + 1])
-
-
-def distribution(a, b):
-	""""Функция разбивает список a на b промежутков"""
-	e = list(range(2, len(a) - 1))
-	assert(len(e) >= b - 1)
-	shuffle(e)
-	s = sorted(e[:b - 1] + [0] + [len(a)])
-	r = []
-	for i in range(b):
-		r.append(a[s[i]: s[i+1]])
-	return r
-
-
-def addition(x, y):
-	"""Функция получает два списка и расширяет меньший из них с помощью дубликатов его элементов,
-	чтобы списки сравнялись по длине"""
-	if len(x) < len(y):
-		a, b = x, y
-		r = False
-	else:
-		a, b = y, x
-		r = True
-	c = []
-	while len(a) + len(c) < len(b):
-		c.append(choice(a))
-	a += c
-	a.sort()
-	if r:
-		a, b = b, a
-	return list(zip(a, b))
+from ..tools.list_tools import pairs, split, align
 
 
 def graph(nodes):
@@ -48,12 +11,12 @@ def graph(nodes):
 	g = digraph()
 	g.add_nodes(nodes)
 	k = randint(3, (len(nodes) + 2) // 3)
-	levels = [nodes[:1], *distribution(nodes[1:-1], k), nodes[-1:]]
+	levels = [nodes[:1], *split(nodes[1:-1], k), nodes[-1:]]
 	for i in range(len(levels) - 1):
 		if len(levels[i]) >= 2:
-			for edge in horizontal(levels[i]):
+			for edge in pairs(levels[i], randint(1, (len(levels[i]) + 1) // 2)):
 				g.add_edge(edge)
-		for edge in addition(levels[i][:], levels[i+1][:]):
+		for edge in zip(*align(levels[i], levels[i+1])):
 			g.add_edge(edge)
 	return g
 
