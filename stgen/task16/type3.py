@@ -1,5 +1,5 @@
+from random import choices
 from .common import *
-from ..tools.choices import choices
 
 
 class Type3(Task16):

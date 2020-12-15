@@ -1,6 +1,5 @@
-from ..tools.choices import choices
 from ..tools.irregular_code import code
-from random import choice, randint, sample, shuffle
+from random import choice, choices, randint, sample, shuffle
 from .common import Task05
 
 

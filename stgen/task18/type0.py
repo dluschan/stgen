@@ -1,10 +1,9 @@
-from random import randint, shuffle, choice
+from random import randint, shuffle, choice, choices
 from functools import reduce
 from intervals import open, closed, openclosed, closedopen, empty, inf
 from .common import *
 from ..tools.common import letters
 from ..tools.boolean import Membership, NotMembership, Conjunction, Disjunction, mutation, brackets
-from ..tools.choices import choices
 
 
 class Type0(Task18):
