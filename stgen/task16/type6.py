@@ -6,10 +6,10 @@ class Type6(Task16):
 	"""Использование сдвига вместо деления и умножения."""
 	def __init__(self):
 		super().__init__()
-		self.question = 'Найдите значение выражение {expression}. Ответ запишите в системе счисления с основанием {base}.'
-		self.m = randint(12, 16)
+		self.question = 'Найдите значение выражения {expression}. Ответ запишите в системе счисления с основанием {base}.'
+		self.m = randint(10, 12)
 		self.k = randint(2, 4)
-		self.m = single_decompose(self.m, self.k, 8)
+		self.m = single_decompose(self.m, self.k, 6)
 		self.source_base = randint(2, 9)
 		self.limit_base = {2: 5, 3: 3, 4: 2, 5: 2, 6: 2, 7: 1, 8: 1, 9: 1}
 		self.limit_factor = {2: 8, 3: 5, 4: 4, 5: 3, 6: 3, 7: 3, 8: 2, 9: 2}
