@@ -16,7 +16,7 @@ class Type5(Task16):
 		self.digit = randint(0, self.base ** self.degreeLimit - 1)
 		base_width = (self.repeats - 1) * self.degreeLimit + len(transform(self.digit, self.base))
 		if not self.digit:
-			base_width += 1
+			base_width += self.degreeLimit
 		min_width = (base_width + self.degreeTarget - 1) // self.degreeTarget
 		self.width = randint(min_width, min_width + 3)
 
