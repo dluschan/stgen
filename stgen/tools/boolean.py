@@ -104,6 +104,30 @@ class Variable(Term):
 		return self.family == other.family and self.order == other.order
 
 
+class UnorderedVariable(Variable):
+	"""Логическая переменная без индекса."""
+	priority = 7
+
+	def __init__(self, name):
+		assert type(name) == str
+		self.name = name
+
+	def __repr__(self):
+		return self.name
+
+	def __str__(self):
+		return self.name
+
+	def __call__(self, **kwargs):
+		return kwargs[str(self)]
+
+	def __hash__(self):
+		return hash(str(self))
+
+	def __eq__(self, other):
+		return self.name == other.name
+
+
 class Constant(Term):
 	"""Логическая константа."""
 	priority = 7
