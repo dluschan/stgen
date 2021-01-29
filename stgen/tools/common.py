@@ -30,7 +30,11 @@ def get_primes(n):
 
 
 decimal_digits = '0123456789'
-latin_alphabet_small = 'abcdefghijklmnopqrstuvwxyz'
-latin_alphabet_big = latin_alphabet_small.upper()
-hex_digits = decimal_digits + latin_alphabet_small
+latin_alphabet_small   = 'abcdefghijklmnopqrstuvwxyz'
+russian_alphabet_small = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+greek_alphabet_small   = 'αβγδεζηθικλμνξοπρστυφχψω'
+latin_alphabet_big   = latin_alphabet_small.upper()
+russian_alphabet_big = russian_alphabet_small.upper()
+greek_alphabet_big   = greek_alphabet_small.upper()
+hex_digits = decimal_digits + latin_alphabet_small[:6]
 letters = latin_alphabet_small
