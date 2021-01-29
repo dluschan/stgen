@@ -54,7 +54,7 @@ class Field:
 		font_size = 50
 		grid_width = self.cols * cell_width
 		grid_height = self.rows * cell_height
-		svg = f"""<svg width="50%" max-width="400px" viewBox="0 0 {indent + digit_width + grid_width + indent} {indent + grid_height + cell_height + indent}"\n"""
+		svg = f"""<svg width="50%" max-width="400px" viewBox="0 0 {indent + digit_width + grid_width + indent} {indent + grid_height + cell_height + indent}">\n"""
 		grid = """<g stroke="black" stroke-width="2">\n"""
 		for i in range(self.rows + 1):
 			grid += f"""<line x1="{indent + digit_width}" y1= "{indent + i*cell_height}" x2="{indent + digit_width + grid_width}" y2= "{indent + i*cell_height}" />\n"""
