@@ -1,4 +1,4 @@
-from tag import create_tag
+from .tag import create_tag
 
 
 def create_table(rows):
