@@ -2,6 +2,19 @@ def latex(s):
 	return "\\( " + s + " \\)"
 
 
+def get_factors(n):
+	"""Возвращает отсортированный по возрастанию список натуральных делителей числа n."""
+	head, tail, k = [], [], 1
+	while k * k < n:
+		if n % k == 0:
+			head.append(k)
+			tail.append(n // k)
+		k += 1
+	if k * k == n:
+		head.append(k)
+	return head + tail[::-1]
+
+
 def get_primes(n):
 	"""возвращает список из первых n простых чисел"""
 	assert n > 0, "количество простых чисел должно быть больше нуля"
